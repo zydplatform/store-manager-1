@@ -227,9 +227,39 @@ table, th, td {
     padding: 1.5rem;
 }
 
-.products form {
+.products .search form {
     padding: 0.5rem 0;
     text-align: center;
+}
+
+.add-products {
+    margin-bottom: 20px;
+}
+
+.products-title {
+    background: var(--dark);
+    color: var(--light);
+    text-align: center;
+}
+
+.add-products form {
+    text-align: center;
+}
+
+.add-products form > input, select, button{
+    display: inline-block;
+    width: 20%;
+    margin: 0.1rem 1rem 0.1rem 0.1rem;
+    padding: 0.3rem;
+    font-size: 15px;
+    text-transform: capitalize;
+    border: 1px solid var(--dark);
+    border-radius: 4px;
+}
+
+.products-title p {
+    padding: 5px;
+    margin: 5px;
 }
 
 .change-password h3 {
