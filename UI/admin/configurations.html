@@ -77,6 +77,10 @@
                     <form action="#">
                         <input type="text" name="currency-name" id="currency-name" placeholder="Currency Name">
                         <input type="text" name="currency-symbol" id="currency-symbol" placeholder="Currency Symbol">
+                        <select name="default-currency" id="default-currency">
+                            <option>Select</option>
+                            <option value="default">Default</option>
+                        </select>
                         <button class="btn" type="submit" id="add-currency-symbol">Add</button>
                     </form>
                 </div>
@@ -87,12 +91,14 @@
                         <th>S/N</th>
                         <th>Currency Name</th>
                         <th>Currency Symbol</th>
+                        <th>Default</th>
                         <th>Action</th>
                     </tr>
                     <tr>
                         <td>1</td>
                         <td>Dollar</td>
                         <td>USD</td>
+                        <td>&#10006;</td>
                         <td>
                             <form action="#" method="post">
                                 <select name="action" id="action">
@@ -107,6 +113,7 @@
                         <td>2</td>
                         <td>Shilings</td>
                         <td>UGX</td>
+                        <td>&#10004;</td>
                         <td>
                             <form action="#" method="post">
                                 <select name="action" id="action">
