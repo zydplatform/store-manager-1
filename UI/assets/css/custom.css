@@ -72,3 +72,207 @@ img {
     width: 50%;
     margin: 5px 0px;
 }
+
+/* Dashboard */
+.container {
+    display: grid;
+    grid-gap: 20px;
+}
+
+.header {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    font-weight: bold;
+    color: var(--dark);
+    background: var(--primary);
+    box-shadow: var(--shadow);
+    padding: 1rem;
+}
+
+.header .logo {
+    text-transform: uppercase;
+    justify-self: left;
+}
+
+.header .title {
+    text-transform: uppercase;
+    justify-self: center;
+}
+
+.header .user {
+    text-transform: capitalize;
+    justify-self: right;
+}
+
+/* Main */
+
+.main{
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: 2fr 10fr;
+    min-height: 400px;
+}
+
+.sidebar, .showarea, .sales-point, .all-products {
+    box-shadow: var(--shadow);
+}
+
+/* Main - Sidebar */
+.sidebar {
+    padding: 0;
+    margin: 0px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    box-shadow: var(--shadow);
+    padding: 0;
+    margin: 0 0 20px 0;
+    border: 1px solid var(--dark);
+}
+
+.sidebar li a {
+    display: block;
+    color: var(--dark);
+    margin: 0px;
+    padding: 0px 5px;
+    text-decoration: none;
+}
+
+.sidebar li {
+    border-bottom: 1px solid var(--dark);
+}
+
+.sidebar li:last-child {
+    border-bottom: none;
+}
+
+li a.active, li a:hover:not(.active) {
+    background-color: var(--hovered);
+    color: var(--light);
+}
+
+.sidebar .major, .Administration, .settings {
+    box-shadow: var(--shadow);
+    width: 100%;
+}
+
+/* Main - Show Area */
+.main .showarea {
+    padding: 1.5rem;
+}
+
+/* Main - Show Area - Show Case */
+.showcase {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.showcase > div {
+    text-align: center;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow);
+}
+
+.showcase > div h4 {
+    font-weight: bolder;
+    font-size: 2rem;
+    margin: 0.5rem;
+}
+
+.showcase > div p {
+    font-weight: bolder;
+    font-size: 2rem;
+    margin: 0.5rem;
+}
+
+.showcase > div:hover {
+    background: var(--dark);
+    color: var(--light);
+}
+
+/* Main - Show Area - Recent Sales */
+table {
+    color: var(--dark);
+    width: 100%;
+    border: 1px;
+}
+
+table caption {
+    font-weight: bolder;
+    text-align: center;
+    background: var(--dark);
+    color: var(--light);
+}
+
+table, th, td {
+    border: 1px solid var(--dark);
+    border-collapse: collapse;
+    text-align: center;
+}
+
+/* sales point */
+.sales-point {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns:  repeat(auto-fit, minmax(400px, 1fr));
+    padding: 1rem;
+}
+
+/* Products */
+
+.all-products {
+    padding: 1.5rem;
+}
+
+.products form {
+    padding: 0.5rem 0;
+    text-align: center;
+}
+
+.products form > input{
+    margin: 0.1rem 1rem 0.1rem 0.1rem;
+    padding: 0.3rem;
+    font-size: 15px;
+    text-transform: capitalize;
+    width: 90%;
+    border: 1px solid var(--dark);
+    border-radius: 4px;
+}
+
+/* Buyer Cart */
+
+.buyer-cart h2 {
+    margin: 0.5rem 0;
+    text-align: center;
+}
+
+.buyer-cart span {
+    font-weight: bold;
+}
+
+.buyer-cart button {
+    float: right;
+    width: 30%;
+}
+
+/* Setings */
+
+
+
+
+/* Footer */
+.footer {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(1fr);
+    font-weight: bold;
+    font-size: normal;
+    color: var(--dark);
+    background: var(--primary);
+    box-shadow: var(--shadow);
+    padding: 0 1rem;
+    text-align: center
+}
