@@ -246,7 +246,7 @@ table, th, td {
     text-align: center;
 }
 
-.add-products form > input, select, button{
+.add-products form input, .add-products form select, .add-products form button{
     display: inline-block;
     width: 20%;
     margin: 0.1rem 1rem 0.1rem 0.1rem;
@@ -292,6 +292,11 @@ table, th, td {
 .buyer-cart button {
     float: right;
     width: 30%;
+}
+
+.products-table input {
+    width: 4rem;
+    text-align: center;
 }
 
 /* Setings */
