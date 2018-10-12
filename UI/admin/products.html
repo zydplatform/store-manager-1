@@ -70,10 +70,28 @@
 
             <!-- products -->
             <div class="all-products">
-                <div class="search products">
+                <div class="add-products">
+                    <div class="products-title">
+                        <p>Add Product</p>
+                    </div>
                     <form action="#">
-                        <input type="text" name="product-name" id="product-name" placeholder="Search A Product">
+                        <select name="add-product" id="add-product">
+                            <option>Product Category</option>
+                            <option value="category1">Category 1</option>
+                            <option value="category2">Category 2</option>
+                            <option value="category3">Category 3</option>
+                        </select>
+                        <input type="text" name="product-name" id="product" placeholder="Product Name">
+                        <input type="number" name="product-quantity" id="product-quantity" placeholder="Quantity">
+                        <button class="btn" type="submit" id="add-product">Add</button>
                     </form>
+                </div>
+                <div class="products">
+                    <div class="search">
+                        <form action="#">
+                            <input type="text" name="product-name" id="product-name" placeholder="Search A Product">
+                        </form>
+                    </div>
                 </div>
                 <table class="products-table">
                     <caption>All Stock Products</caption>
