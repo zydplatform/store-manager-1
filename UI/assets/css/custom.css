@@ -232,7 +232,13 @@ table, th, td {
     text-align: center;
 }
 
-.products form > input{
+.change-password h3 {
+    margin: 0%;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.change-password form input, .products form > input{
     margin: 0.1rem 1rem 0.1rem 0.1rem;
     padding: 0.3rem;
     font-size: 15px;
@@ -260,7 +266,30 @@ table, th, td {
 
 /* Setings */
 
+/* Change Password */
+.change-password {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns:  1fr;
+    justify-items: center;
+    padding: 2rem;
+}
 
+.change-password-form {
+    padding: 2rem 0;
+    width: 500px;
+    box-shadow: var(--shadow);
+}
+
+.change-password form > input, .change-password form > button{
+    margin: 1rem;
+    padding: 0.5rem;
+    font-size: 15px;
+    text-transform: capitalize;
+    width: 90%;
+    border: 1px solid var(--dark);
+    border-radius: 4px;
+}
 
 
 /* Footer */
