@@ -213,6 +213,16 @@ table, th, td {
     text-align: center;
 }
 
+table a {
+    color: var(--dark);
+    text-decoration: none;
+}
+
+table a:hover {
+    font-weight: bold;
+}
+
+
 /* sales point */
 .sales-point {
     display: grid;
@@ -297,6 +307,16 @@ table, th, td {
 .products-table input {
     width: 4rem;
     text-align: center;
+}
+
+.products-details-table {
+    width: 60%;
+    margin: auto;
+}
+
+.products-details-table th, .products-details-table td {
+    text-align: left;
+    padding-left: 10px;
 }
 
 /* Setings */
