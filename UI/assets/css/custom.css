@@ -213,6 +213,16 @@ table, th, td {
     text-align: center;
 }
 
+table a {
+    color: var(--dark);
+    text-decoration: none;
+}
+
+table a:hover {
+    font-weight: bold;
+}
+
+
 /* sales point */
 .sales-point {
     display: grid;
