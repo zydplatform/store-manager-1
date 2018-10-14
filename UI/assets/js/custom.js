@@ -10,6 +10,5 @@ loginForm.addEventListener("submit", function(e) {
         window.location.href = 'admin/dashboard.html';
     else if (username == 'attendant' && password == 'attendant')
         window.location.href = 'attendant/dashboard.html';
-    else
-        alert('Please Use USERNAME : admin AND PASSWORD: password FOR Admin OR USERNAME : attendant AND PASSWORD: attendant FOR Attendant');
+        
 });
