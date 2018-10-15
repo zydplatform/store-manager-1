@@ -40,6 +40,10 @@ img {
     padding: 0px 5px;
 }
 
+.error {
+    color: red;
+}
+
 /* Login */
 .login-section {    
     display: grid;
@@ -71,6 +75,10 @@ img {
     float: right;
     width: 50%;
     margin: 5px 0px;
+}
+
+#wrong-username, #wrong-pasword{
+    visibility: hidden;
 }
 
 /* Dashboard */
