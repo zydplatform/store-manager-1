@@ -27,9 +27,11 @@ products = [
 
 product_categories = [
                         {
+                            "category_id": 1,
                             "category_name": "Fruits"
                         },
                         {
+                            "category_id": 2,
                             "category_name": "Drinks"
                         }
                     ]

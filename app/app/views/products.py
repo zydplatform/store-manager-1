@@ -9,6 +9,15 @@ from app.models.products import Products
 def view_all_product_categories():
     return jsonify({"product_categories": product_categories}), 200
 
+@app.route('/api/v1/admin/products_categories/<int:category_id>/', methods=['GET'])
+@app.route('/api/v1/admin/products_categories/<int:category_id>/', methods=['GET'])
+def view_aproduct_category_details(category_id):
+    category = [category for category in product_categories if category["category_id"] == category_id]
+
+    if len(category) == 0:
+        abort(404)
+
+    return jsonify({"product_category": category[0]}), 200
 
 @app.route('/api/v1/admin/products/', methods=['POST'])
 def add_product():
