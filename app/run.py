@@ -1,6 +1,7 @@
 
 from flask import jsonify
 from app import app
+from app.views import products
 
 @app.errorhandler(404)
 def not_found(error):
@@ -19,7 +20,7 @@ def server_error(error):
 
 @app.route('/api/v1/')
 def home():
-    return jsonify({"message": "Welcome To The Store Manager System API"})
+    return jsonify({"message": "Welcome To The Store Manager System API Version 1"})
 
 
 if __name__ == '__main__':
