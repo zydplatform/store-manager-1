@@ -24,3 +24,12 @@ products = [
                     "product_minimum_stock_allowed": 20
                 }
             ]
+
+product_categories = [
+                        {
+                            "category_name": "Fruits"
+                        },
+                        {
+                            "category_name": "Drinks"
+                        }
+                    ]

@@ -1,8 +1,13 @@
 
 from flask import jsonify, abort, request
 from app import app
-from app.models import products, MINIMUM_STOCK_ALLOWED
+from app.models import products, product_categories, MINIMUM_STOCK_ALLOWED
 from app.models.products import Products
+
+@app.route('/api/v1/admin/products_categories/', methods=['GET'])
+@app.route('/api/v1/attendant/products_categories/', methods=['GET'])
+def view_all_product_categories():
+    return jsonify({"product_categories": product_categories}), 200
 
 
 @app.route('/api/v1/admin/products/', methods=['POST'])
