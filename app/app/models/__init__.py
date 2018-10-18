@@ -4,6 +4,8 @@ from datetime import datetime
 
 time = str(datetime.now())
 
+MINIMUM_STOCK_ALLOWED = 10
+
 products = [
                 {
                     "product_id": 1,
