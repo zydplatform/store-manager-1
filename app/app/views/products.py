@@ -38,7 +38,7 @@ def view_aproduct_details(product_id):
     return jsonify({"Product": product[0]}), 200
 
 @app.route('/api/v1/admin/products/<int:product_id>', methods=['PUT'])
-def edit_product(product_id):
+def edit_aproduct(product_id):
     data = request.json
 
     try:
@@ -54,3 +54,14 @@ def edit_product(product_id):
                 abort(500)
     except:
         abort(500)
+
+@app.route('/api/v1/admin/products/<int:product_id>', methods=['DELETE'])
+def delete_aproduct(product_id):
+    product = [product for product in products if product["product_id"] == product_id]
+
+    if len(product) == 0:
+        abort(404)
+
+    products.remove(product[0])
+    
+    return jsonify({"product_removed": f"{product[0]['product_name']} removed from inventory"}), 200
