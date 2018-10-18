@@ -53,6 +53,17 @@ def edit_aproduct_category(category_id):
     except:
         abort(500)
 
+@app.route('/api/v1/admin/products_categories/<int:category_id>', methods=['DELETE'])
+def delete_aproduct_category(category_id):
+    category = [category for category in product_categories if category["category_id"] == category_id]
+
+    if len(category) == 0:
+        abort(404)
+
+    product_categories.remove(category[0])
+    
+    return jsonify({"product_removed": f"{category[0]['category_name']} category removed"}), 200
+
 
 @app.route('/api/v1/admin/products/', methods=['POST'])
 def add_product():
