@@ -3,6 +3,22 @@ from flask import jsonify, abort, request
 from app import app
 from app.models import products, product_categories, MINIMUM_STOCK_ALLOWED
 from app.models.products import Products
+from app.models.products import ProductCategories
+
+
+@app.route('/api/v1/admin/products_categories/', methods=['POST'])
+def add_product_category():
+    data = request.json
+
+    category_name = data["category_name"]
+
+    inventory = ProductCategories(category_name)
+
+    if inventory.add_product_category() is True:
+        return jsonify({"product_category_added": "The product category has been added"}), 200
+    else:
+        return jsonify({"product_category_available": "The product category is already added"})
+
 
 @app.route('/api/v1/admin/products_categories/', methods=['GET'])
 @app.route('/api/v1/attendant/products_categories/', methods=['GET'])

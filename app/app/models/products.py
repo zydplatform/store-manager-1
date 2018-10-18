@@ -1,5 +1,5 @@
 
-from app.models import  products
+from app.models import  products, product_categories
 
 class Products:
 
@@ -55,3 +55,24 @@ class Products:
 
             return True
 
+
+class ProductCategories:
+
+    def __init__(self, category_name):
+        self.category_name = category_name
+
+    def add_product_category(self):
+        category = {
+            "category_id" : product_categories[-1]["category_id"]+1,
+            "category_name" : self.category_name
+        }
+
+        if category in product_categories or [
+                                    category for category in product_categories
+                                    if category["category_name"] ==  self.category_name
+                                ]:
+            return False
+
+        else:
+            product_categories.append(category)
+            return True
