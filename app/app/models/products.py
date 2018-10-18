@@ -33,4 +33,25 @@ class Products:
         else:
             products.append(product)
             return True
+    
+    def update_product(self, product):
+        if len(product) == 0:
+            return False
+        else:
+            if product[0]["product_name"] != self.product_name:
+                product[0]["product_name"] = self.product_name
+
+            if product[0]["product_category"] != self.product_category:
+                product[0]["product_category"] = self.product_category
+
+            if product[0]["product_price"] != self.product_price:
+                product[0]["product_price"] = self.product_price
+
+            if product[0]["product_quantity"] != self.product_quantity:
+                product[0]["product_quantity"] = self.product_quantity
+
+            if product[0]["product_minimum_stock_allowed"] != self.product_minimum_stock_allowed:
+                product[0]["product_minimum_stock_allowed"] =  self.product_minimum_stock_allowed
+
+            return True
 
