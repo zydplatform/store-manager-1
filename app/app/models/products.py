@@ -76,3 +76,13 @@ class ProductCategories:
         else:
             product_categories.append(category)
             return True
+
+
+    def update_product_category(self, category):
+        if len(category) == 0:
+            return False
+        else:
+            if category[0]["category_name"] != self.category_name:
+                category[0]["category_name"] = self.category_name
+
+            return True

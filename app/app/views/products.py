@@ -35,6 +35,25 @@ def view_aproduct_category_details(category_id):
 
     return jsonify({"product_category": category[0]}), 200
 
+@app.route('/api/v1/admin/products_categories/<int:category_id>', methods=['PUT'])
+def edit_aproduct_category(category_id):
+    data = request.json
+
+    try:
+        category = [category for category in product_categories if category["category_id"] == category_id]
+
+        if len(category) == 0:
+            abort(500)
+        else:
+            inventory = ProductCategories(data["category_name"])
+            if inventory.update_product_category(category):
+                return jsonify({"Updated": f"{category[0]['category_name']} updated"}), 200
+            else:
+                abort(500)
+    except:
+        abort(500)
+
+
 @app.route('/api/v1/admin/products/', methods=['POST'])
 def add_product():
     data = request.json
