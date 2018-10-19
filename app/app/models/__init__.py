@@ -53,3 +53,25 @@ attendants = [
                     "attendant_password" : "A/2018/002"
                 }
             ]
+
+        
+sales = [
+            {
+                "sales_id": 1,
+                "seller": "Walujo Emmanuel",
+                "product": "aple",
+                "price" : 1000,
+                "quantity" : 2,
+                "Total_cost": 2000,
+                "date_sold": "12/10/2018"
+            },
+            {
+                "sales_id": 2,
+                "seller": "Mukisa Amos",
+                "product": "Mangoes",
+                "price" : 500,
+                "quantity" : 6,
+                "Total_cost": 3000,
+                "date_sold": "10/10/2018"
+            }
+        ]

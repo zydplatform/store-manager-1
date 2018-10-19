@@ -1,7 +1,7 @@
 
 from flask import jsonify
 from app import app
-from app.views import products, users
+from app.views import products, users, sales
 
 @app.errorhandler(404)
 def not_found(error):
