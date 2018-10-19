@@ -34,3 +34,14 @@ def view_astore_attendant_details(attendant_id):
 
     return jsonify({"attendant": attendant[0]}), 200
 
+
+@app.route('/api/v1/admin/attendants/<int:attendant_id>', methods=['DELETE'])
+def delete_astore_attendant(attendant_id):
+    attendant = [attendant for attendant in attendants if attendant["attendant_id"] == attendant_id]
+
+    if len(attendant) == 0:
+        abort(404)
+
+    attendants.remove(attendant[0])
+    
+    return jsonify({"attendant_removed": f"{attendant[0]['attendant_name']} removed"}), 200
