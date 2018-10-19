@@ -17,3 +17,15 @@ def view_asale_details(sales_id):
         abort(404)
 
     return jsonify({"sale": sale[0]}), 200
+
+
+@app.route('/api/v1/admin/sales/<int:sales_id>', methods=['DELETE'])
+def delete_asale(sales_id):
+    sale = [sale for sale in sales if sale["sales_id"] == sales_id]
+
+    if len(sale) == 0:
+        abort(404)
+
+    sales.remove(sale[0])
+    
+    return jsonify({"sale_removed": f"sale of {sale[0]['product']} canceled"}), 200
