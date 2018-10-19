@@ -34,6 +34,23 @@ def view_astore_attendant_details(attendant_id):
 
     return jsonify({"attendant": attendant[0]}), 200
 
+@app.route('/api/v1/admin/attendants/<int:attendant_id>', methods=['PUT'])
+def edit_astore_attendant(attendant_id):
+    data = request.json
+
+    try:
+        attendant = [attendant for attendant in attendants if attendant["attendant_id"] == attendant_id]
+
+        if len(attendant) == 0:
+            abort(500)
+        else:
+            user = Attendants(data["id_number"], data["attendant_name"], data["attendant_username"], data["attendant_password"])
+            if user.update_store_attendant(attendant):
+                return jsonify({"Updated": f"{attendant[0]['attendant_name']} updated"}), 200
+            else:
+                abort(500)
+    except:
+        abort(500)
 
 @app.route('/api/v1/admin/attendants/<int:attendant_id>', methods=['DELETE'])
 def delete_astore_attendant(attendant_id):
