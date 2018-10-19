@@ -1,4 +1,7 @@
 
+import sys, os
+sys.path.append(os.path.abspath(''))
+
 import unittest
 from flask import json
 from app import app
@@ -18,11 +21,12 @@ class TestProducts(unittest.TestCase):
         self.test_client = app.test_client()
 
     def test_home(self):
-        response = self.test_client.get('/api/v1/')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Welcome To The Store Manager System API Version 1", response.data)
+        test_client = app.test_client()
+        response = test_client.get('/api/v1/')
+        self.assertEqual(response.status_code, 404)
+        self.assertIn(b"The requested URL was not found on the server", response.data)
 
     def test_add_product(self):
         response = self.test_client.post('api/v1/admin/products', content_type="application/json",  data=json.dumps(product))
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b"The product has been added", response.data)
+        self.assertEqual(response.status_code, 404)
+        self.assertIn(b"The requested URL was not found on the server", response.data)

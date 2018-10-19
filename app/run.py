@@ -19,6 +19,7 @@ def server_error(error):
 
 
 @app.route('/api/v1/')
+@app.route('/')
 def home():
     return jsonify({"message": "Welcome To The Store Manager System API Version 1"})
 
