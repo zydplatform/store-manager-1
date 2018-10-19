@@ -1,0 +1,16 @@
+
+language: python
+
+python:
+  - "3.6"
+
+install:
+  - pip install -r requirements.txt
+
+script:
+  - py.test --cov app/tests
+  - py.test --cov-report= --cov app/tests/
+
+
+after_success:
+  - coveralls
