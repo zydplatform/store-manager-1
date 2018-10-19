@@ -5,6 +5,23 @@ from app.models import sales
 from app.models.sales import Sales
 
 
+@app.route('/api/v1/admin/sales/', methods=['POST'])
+def make_sale():
+    data = request.json
+
+    seller = data["seller"]
+    product = data["product"]
+    price = data["price"]
+    quantity = data["quantity"]
+    total_cost = data["total_cost"]
+    date_sold = data["date_sold"]
+
+    inventory = Sales(seller, product, price, quantity, total_cost, date_sold)
+
+    if inventory.make_sale() is True:
+        return jsonify({"sale_made": "product sold"}), 200
+    else:
+        return jsonify({"not_sold": "product not sold"})
 
 @app.route('/api/v1/admin/sales/', methods=['GET'])
 def view_all_sales():
