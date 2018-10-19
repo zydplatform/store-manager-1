@@ -32,20 +32,20 @@ class Attendants:
             return True
     
     def update_store_attendant(self, attendant):
-        # if len(attendant) == 0:
-        #     return False
-        # else:
-        #     if attendant[0]["id_number"] != self.id_number:
-        #         attendant[0]["id_number"] = self.id_number
+        if len(attendant) == 0:
+            return False
+        else:
+            if attendant[0]["id_number"] != self.id_number:
+                attendant[0]["id_number"] = self.id_number
 
-            # if attendant[0]["attendant_name"] != self.attendant_name:
-            #     attendant[0]["attendant_name"] = self.attendant_name
+            if attendant[0]["attendant_name"] != self.attendant_name:
+                attendant[0]["attendant_name"] = self.attendant_name
 
-            # if attendant[0]["attendant_username"] != self.attendant_username:
-            #     attendant[0]["attendant_username"] = self.attendant_username
+            if attendant[0]["attendant_username"] != self.attendant_username:
+                attendant[0]["attendant_username"] = self.attendant_username
 
-            # if attendant[0]["attendant_password"] != self.attendant_password:
-            #     attendant[0]["attendant_password"] = self.attendant_password
+            if attendant[0]["attendant_password"] != self.attendant_password:
+                attendant[0]["attendant_password"] = self.attendant_password
 
         return True
 

@@ -10,8 +10,8 @@ def add_store_attendant():
 
     id_number = data["id_number"]
     attendant_name = data["attendant_name"]
-    attendant_username = data["attendant_username"]
-    attendant_password = data["attendant_password"]
+    attendant_username = data["id_number"]
+    attendant_password = data["id_number"]
 
     users = Attendants(id_number, attendant_name, attendant_username, attendant_password)
 
