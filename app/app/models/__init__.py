@@ -62,7 +62,7 @@ sales = [
                 "product": "aple",
                 "price" : 1000,
                 "quantity" : 2,
-                "Total_cost": 2000,
+                "total_cost": 2000,
                 "date_sold": "12/10/2018"
             },
             {
@@ -71,7 +71,7 @@ sales = [
                 "product": "Mangoes",
                 "price" : 500,
                 "quantity" : 6,
-                "Total_cost": 3000,
+                "total_cost": 3000,
                 "date_sold": "10/10/2018"
             }
         ]
