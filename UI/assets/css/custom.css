@@ -368,3 +368,10 @@ table a:hover {
     padding: 0 1rem;
     text-align: center
 }
+
+/* Media Queries */
+@media(max-width: 700px) {
+    .main, .showcase {
+        grid-template-columns: 1fr;
+    }
+}
