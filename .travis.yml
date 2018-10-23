@@ -11,7 +11,4 @@ install:
 
 script:
   - pytest --cov=api tests/
-
-after_success:
-  - coveralls
-  - codecov
+  
