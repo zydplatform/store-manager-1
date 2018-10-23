@@ -1,13 +1,19 @@
 language: python
+
 python:
-  - "3.6"
+    - "3.6"
 
 env:
-  global:
     - CODECOV_TOKEN="e5e426ed-a4c9-43d9-8a98-d549e370578c"
 
 install:
-  - pip install -r requirements.txt
+    - pip install -r test_requirements.txt
+
+before_script:
+    - pytest api/tests/ --cov=api
 
 script:
-  - pytest
+    - pytest tests/
+
+after_success:
+    - coveralls
