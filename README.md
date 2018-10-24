@@ -51,7 +51,7 @@ The application was hosted on [Heroku](http://heroku.com) and you can find it [H
 **[Sample Application](https://edmon-store-manager.herokuapp.com/)**
 
 ## Author
-**NAME:** Walujo Emmauel
+**NAME:** Walujo Emmauel <br/>
 **Email:** walujoemmanuel@gmail.com
 
 ## Acknowledgements
