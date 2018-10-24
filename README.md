@@ -52,7 +52,7 @@ The application was hosted on [Heroku](http://heroku.com) and you can find it [H
 
 ## Author
 **NAME:** Walujo Emmauel <br/>
-**Email:** walujoemmanuel@gmail.com
+**EMAIL:** walujoemmanuel@gmail.com
 
 ## Acknowledgements
 This work would have not been possible without the support of [Andela](https://andela.com/) and for that reason I therefore extend my special thanks to Andela Learning Facilitators who have been so supportive and helped me make it. Iam especially indebted to Mr. Kapeyi Samson, Mr. Abraham Kiggundu and Mr. Stanley Barna my Learning facilitators who have been of great value to me. I thank my teammates too who have rescued me in some stuations when i was stack, to mention Mr. Ogwal Emmanuel and Mr. Sanya Kenneth.  
