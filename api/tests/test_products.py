@@ -32,5 +32,20 @@ class ProductsTestCase(TestCase):
         response = self.tester.get('/api/v1/admin/products/1/')
         response = self.tester.get('/api/v1/attendant/products/1/')
         self.assertEqual(response.status_code, 200)
+    
+    def test_edit_aproduct_details(self):
+        response = self.tester.put('/api/v1/admin/products/1', 
+            content_type="application/json", 
+            data=json.dumps(
+                dict(
+                    product_name = "Cabbage",
+                    product_category = "Vegetables",
+                    product_price = 1500,
+                    product_quantity = 13,
+                    product_minimum_stock_allowed = 5
+                )
+            )
+        )
+        self.assertEqual(response.status_code, 200)
 
     
