@@ -66,3 +66,8 @@ class ProductsTestCase(TestCase):
         response = self.tester.get('/api/v1/admin/products_categories/')
         response = self.tester.get('/api/v1/attendant/products_categories/')
         self.assertEqual(response.status_code, 200)
+
+    def test_get_aspecific_product_category(self):
+        response = self.tester.get('/api/v1/admin/products_categories/1/')
+        response = self.tester.get('/api/v1/attendant/products_categories/1/')
+        self.assertEqual(response.status_code, 200)
