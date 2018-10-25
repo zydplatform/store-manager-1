@@ -26,4 +26,8 @@ class UsersTestCase(TestCase):
         response = self.tester.get('/api/v1/admin/attendants/')
         self.assertEqual(response.status_code, 200)
     
+    def test_get_aspecific_attendant_details(self):
+        response = self.tester.get('/api/v1/admin/attendants/1/')
+        self.assertEqual(response.status_code, 200)
+    
     
