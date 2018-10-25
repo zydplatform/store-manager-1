@@ -16,6 +16,9 @@ def bad_request(error):
 def server_error(error):
     return jsonify({'error': 'Server Error, Try Again'}), 500
 
+@app.route('/')
+def index():
+    return "<h3>Welcome To The Store Manager System API Version 1</h3>"
 
 @app.route('/api/v1/')
 def home():
