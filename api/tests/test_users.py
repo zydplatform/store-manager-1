@@ -30,4 +30,18 @@ class UsersTestCase(TestCase):
         response = self.tester.get('/api/v1/admin/attendants/1/')
         self.assertEqual(response.status_code, 200)
     
+    def test_edit_aspecific_attendant_details(self):
+        response = self.tester.put('/api/v1/admin/attendants/1', 
+            content_type="application/json", 
+            data=json.dumps(
+                dict(
+                    id_number = "A/2018/024",
+                    attendant_name = "Mutesi Surea",
+                    attendant_username = "A/2018/024",
+                    attendant_password = "A/2018/024"
+                )
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
     
