@@ -42,4 +42,9 @@ class SalesTestCase(TestCase):
         response = self.tester.get('/api/v1/attendant/sales/')
         self.assertEqual(response.status_code, 200)
     
+    def test_get_one_sales_record(self):
+        response = self.tester.get('/api/v1/admin/sales/1/')
+        response = self.tester.get('/api/v1/attendant/sales/1/')
+        self.assertEqual(response.status_code, 200)
+    
     
