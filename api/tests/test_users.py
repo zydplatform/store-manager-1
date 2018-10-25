@@ -22,4 +22,8 @@ class UsersTestCase(TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
+    def test_get_all_registered_attendants(self):
+        response = self.tester.get('/api/v1/admin/attendants/')
+        self.assertEqual(response.status_code, 200)
+    
     
