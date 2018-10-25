@@ -63,4 +63,7 @@ class SalesTestCase(TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
+    def test_admin_remove_asales_record(self):
+        response = self.tester.delete('/api/v1/admin/sales/2')
+        self.assertEqual(response.status_code, 200)
     
