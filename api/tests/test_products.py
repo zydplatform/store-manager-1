@@ -48,4 +48,7 @@ class ProductsTestCase(TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
+    def test_delete_aproduct(self):
+        response = self.tester.delete('/api/v1/admin/products/2')
+        self.assertEqual(response.status_code, 200)
     
