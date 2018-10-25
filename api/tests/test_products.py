@@ -28,8 +28,9 @@ class ProductsTestCase(TestCase):
         response = self.tester.get('/api/v1/attendant/products/')
         self.assertEqual(response.status_code, 200)
     
-    
-
-    
+    def test_get_one_product(self):
+        response = self.tester.get('/api/v1/admin/products/1/')
+        response = self.tester.get('/api/v1/attendant/products/1/')
+        self.assertEqual(response.status_code, 200)
 
     
