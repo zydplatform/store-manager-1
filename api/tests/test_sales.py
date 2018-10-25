@@ -47,4 +47,20 @@ class SalesTestCase(TestCase):
         response = self.tester.get('/api/v1/attendant/sales/1/')
         self.assertEqual(response.status_code, 200)
     
+    def test_edit_aproduct_details(self):
+        response = self.tester.put('/api/v1/admin/sales/1', 
+            content_type="application/json", 
+            data=json.dumps(
+                dict(
+                    seller = "Babale Adam",
+                    product = "Carot",
+                    price = 300,
+                    quantity = 5,
+                    total_cost = 1500,
+                    date_sold = "12/10/2018"
+                )
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
     
