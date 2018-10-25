@@ -44,4 +44,7 @@ class UsersTestCase(TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
+    def test_admin_delete_aspecific_attendant(self):
+        response = self.tester.delete('/api/v1/admin/attendants/2')
+        self.assertEqual(response.status_code, 200)
     
