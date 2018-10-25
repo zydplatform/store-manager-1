@@ -71,3 +71,12 @@ class ProductsTestCase(TestCase):
         response = self.tester.get('/api/v1/admin/products_categories/1/')
         response = self.tester.get('/api/v1/attendant/products_categories/1/')
         self.assertEqual(response.status_code, 200)
+
+    def test_admin_edit_aspecific_product_category_details(self):
+        response = self.tester.put('/api/v1/admin/products_categories/1', 
+            content_type="application/json", 
+            data = json.dumps(
+                dict( category_name = "House Holds" )
+            )
+        )
+        self.assertEqual(response.status_code, 200)
