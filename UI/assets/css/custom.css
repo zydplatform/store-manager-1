@@ -122,6 +122,10 @@ img {
     min-height: 400px;
 }
 
+.menu-btn {
+    display: none;
+}
+
 .sidebar, .showarea, .sales-point, .all-products {
     box-shadow: var(--shadow);
 }
@@ -372,5 +376,18 @@ table a:hover {
 @media(max-width: 700px) {
     .main, .showcase {
         grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        display: none;
+    }
+
+    .menu-btn {
+        display: block;
+        text-align: center;
+    }
+
+    #menu-btn {
+        cursor: pointer;
     }
 }
