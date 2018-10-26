@@ -6,6 +6,7 @@ from api.app.models.sales import Sales
 
 
 @app.route('/api/v1/admin/sales/', methods=['POST'])
+@app.route('/api/v1/attendant/sales/', methods=['POST'])
 def make_sale():
     data = request.json
 
