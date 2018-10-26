@@ -4,7 +4,7 @@ from api.app import app
 from api.app.models import attendants
 from api.app.models.users import Attendants
 
-@app.route('/api/v1/admin/attendants/', methods=['POST'])
+@app.route('/api/v1/attendants/', methods=['POST'])
 def add_store_attendant():
     data = request.json
 
@@ -21,11 +21,11 @@ def add_store_attendant():
         return jsonify({"attendant_available": "The store attendant is already added"})
 
 
-@app.route('/api/v1/admin/attendants/', methods=['GET'])
+@app.route('/api/v1/attendants/', methods=['GET'])
 def view_all_store_attendants():
     return jsonify({"attendants": attendants}), 200
 
-@app.route('/api/v1/admin/attendants/<int:attendant_id>/', methods=['GET'])
+@app.route('/api/v1/attendants/<int:attendant_id>/', methods=['GET'])
 def view_astore_attendant_details(attendant_id):
     attendant = [attendant for attendant in attendants if attendant["attendant_id"] == attendant_id]
 
@@ -34,7 +34,7 @@ def view_astore_attendant_details(attendant_id):
 
     return jsonify({"attendant": attendant[0]}), 200
 
-@app.route('/api/v1/admin/attendants/<int:attendant_id>', methods=['PUT'])
+@app.route('/api/v1/attendants/<int:attendant_id>', methods=['PUT'])
 def edit_astore_attendant(attendant_id):
     data = request.json
 
@@ -52,7 +52,7 @@ def edit_astore_attendant(attendant_id):
     except:
         abort(500)
 
-@app.route('/api/v1/admin/attendants/<int:attendant_id>', methods=['DELETE'])
+@app.route('/api/v1/attendants/<int:attendant_id>', methods=['DELETE'])
 def delete_astore_attendant(attendant_id):
     attendant = [attendant for attendant in attendants if attendant["attendant_id"] == attendant_id]
 
