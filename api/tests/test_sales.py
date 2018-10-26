@@ -9,7 +9,7 @@ class SalesTestCase(TestCase):
         self.tester = app.test_client()
 
     def test_make_asale(self):
-        response = self.tester.post('/api/v1/admin/sales/', 
+        response = self.tester.post('/api/v1/sales/', 
             content_type="application/json", 
             data=json.dumps(
                 dict(
@@ -22,33 +22,18 @@ class SalesTestCase(TestCase):
                 )
             )
         )
-        response = self.tester.post('/api/v1/attendant/sales/', 
-            content_type="application/json", 
-            data=json.dumps(
-                dict(
-                    seller = "Kaleta Ivan",
-                    product = "aple",
-                    price = 1000,
-                    quantity = 2,
-                    total_cost = 2000,
-                    date_sold = "12/10/2018"
-                )
-            )
-        )
         self.assertEqual(response.status_code, 200)
 
     def test_get_all_sales_records(self):
-        response = self.tester.get('/api/v1/admin/sales/')
-        response = self.tester.get('/api/v1/attendant/sales/')
+        response = self.tester.get('/api/v1/sales/')
         self.assertEqual(response.status_code, 200)
     
     def test_get_one_sales_record(self):
-        response = self.tester.get('/api/v1/admin/sales/1/')
-        response = self.tester.get('/api/v1/attendant/sales/1/')
+        response = self.tester.get('/api/v1/sales/1/')
         self.assertEqual(response.status_code, 200)
     
     def test_edit_aproduct_details(self):
-        response = self.tester.put('/api/v1/admin/sales/1', 
+        response = self.tester.put('/api/v1/sales/1', 
             content_type="application/json", 
             data=json.dumps(
                 dict(
@@ -64,6 +49,6 @@ class SalesTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_admin_remove_asales_record(self):
-        response = self.tester.delete('/api/v1/admin/sales/2')
+        response = self.tester.delete('/api/v1/sales/2')
         self.assertEqual(response.status_code, 200)
     
