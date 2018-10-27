@@ -11,7 +11,7 @@ class Attendants:
 
     def add_store_attendant(self):
         attendant = {
-            "attendant_id" : attendants[-1]["attendant_id"]+1,
+            "attendant_id" : len(attendants) + 1,
             "id_number" : self.id_number,
             "attendant_name" : self.attendant_name,
             "attendant_username" : self.attendant_username,

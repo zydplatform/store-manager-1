@@ -1,4 +1,5 @@
 
+from flask import jsonify
 from api.app.models import  products, product_categories
 
 class ProductCategories:
@@ -8,7 +9,7 @@ class ProductCategories:
 
     def add_product_category(self):
         category = {
-            "category_id" : product_categories[-1]["category_id"]+1,
+            "category_id" : len(product_categories) + 1,
             "category_name" : self.category_name
         }
 
@@ -43,7 +44,7 @@ class Products:
 
     def add_product(self):
         product = {
-            "product_id" : products[-1]["product_id"]+1,
+            "product_id" : len(products) + 1,
             "product_name" : self.product_name,
             "product_category" : self.product_category,
             "product_price" : self.product_price,
@@ -69,19 +70,10 @@ class Products:
         if len(product) == 0:
             return False
         else:
-            if product[0]["product_name"] != self.product_name:
-                product[0]["product_name"] = self.product_name
-
-            if product[0]["product_category"] != self.product_category:
-                product[0]["product_category"] = self.product_category
-
-            if product[0]["product_price"] != self.product_price:
-                product[0]["product_price"] = self.product_price
-
-            if product[0]["product_quantity"] != self.product_quantity:
-                product[0]["product_quantity"] = self.product_quantity
-
-            if product[0]["product_minimum_stock_allowed"] != self.product_minimum_stock_allowed:
-                product[0]["product_minimum_stock_allowed"] =  self.product_minimum_stock_allowed
-
+            product[0]["product_name"] = self.product_name
+            product[0]["product_category"] = self.product_category
+            product[0]["product_price"] = self.product_price
+            product[0]["product_quantity"] = self.product_quantity
+            product[0]["product_minimum_stock_allowed"] =  self.product_minimum_stock_allowed
             return True
+

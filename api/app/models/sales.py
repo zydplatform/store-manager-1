@@ -13,7 +13,7 @@ class Sales:
 
     def make_sale(self):
         sale = {
-            "sales_id" : sales[-1]["sales_id"]+1,
+            "sales_id" : len(sales) + 1,
             "seller" : self.seller,
             "product" : self.product,
             "price" : self.price,
@@ -22,20 +22,8 @@ class Sales:
             "date_sold" : self.date_sold
         }
 
-        if sale in sales or [
-                                sale for sale in sales
-                                if sale["seller"] ==  self.seller
-                                and sale["product"] ==  self.product
-                                and sale["price"] == self.price
-                                and sale["quantity"] ==  self.quantity
-                                and sale["total_cost"] ==  self.total_cost
-                                and sale["date_sold"] ==  self.date_sold
-                            ]:
-            return False
-
-        else:
-            sales.append(sale)
-            return True
+        sales.append(sale)
+        return True
     
     def modify_sale(self, sale):
         if len(sale) == 0:
