@@ -171,9 +171,9 @@ def edit_aproduct(product_id):
 
             inventory = Products(data["product_name"], data["product_category"], data["product_price"], data["product_quantity"], data["product_minimum_stock_allowed"])
             if inventory.update_product(product):
-                return jsonify({"Updated": f"{product[0]['product_name']} updated"}), 200
+                return jsonify({"message": f"{product[0]['product_name']} updated"}), 200
             else:
-                abort(500)
+                return jsonify({"message": f"{product[0]['product_name']} not updated"}), 500
     except:
         abort(500)
 
