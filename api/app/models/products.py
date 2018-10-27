@@ -9,7 +9,7 @@ class ProductCategories:
 
     def add_product_category(self):
         category = {
-            "category_id" : product_categories[-1]["category_id"]+1,
+            "category_id" : len(product_categories) + 1,
             "category_name" : self.category_name
         }
 
@@ -44,7 +44,7 @@ class Products:
 
     def add_product(self):
         product = {
-            "product_id" : products[-1]["product_id"]+1,
+            "product_id" : len(products) + 1,
             "product_name" : self.product_name,
             "product_category" : self.product_category,
             "product_price" : self.product_price,

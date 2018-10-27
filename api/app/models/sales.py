@@ -13,7 +13,7 @@ class Sales:
 
     def make_sale(self):
         sale = {
-            "sales_id" : sales[-1]["sales_id"]+1,
+            "sales_id" : len(sales) + 1,
             "seller" : self.seller,
             "product" : self.product,
             "price" : self.price,
