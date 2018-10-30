@@ -48,3 +48,14 @@ def view_all_users():
         return jsonify({"message": "No users registered yet"}), 404
 
     return jsonify({"users": users}), 200
+
+@app.route('/api/v1/users/<int:user_id>/', methods=['GET'])
+def view_a_registered_user_details(user_id):
+    """" get a specific registered user """
+    user_class = User()
+    user = user_class.get_a_registered_user_by_id(user_id)
+
+    if len(user) == 0:
+        return jsonify({"message": f"The User doesn't exist"}), 404
+
+    return jsonify({"user": user}), 200

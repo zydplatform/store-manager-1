@@ -68,3 +68,26 @@ class User(Database):
             users.append(user)
 
         return users
+
+    def get_a_registered_user_by_id(self, user_id):
+        """ get a specific user from the database """
+
+        get_a_registered_attendant_query = "SELECT * FROM users WHERE user_id = %s"
+        self.cursor.execute(get_a_registered_attendant_query, str(user_id))
+        registered_user = self.cursor.fetchone()
+            
+        if registered_user == None:
+            return {}
+        
+        user = {
+            "user_id" : registered_user[0],
+            "id_number" : registered_user[1],
+            "full_name" : registered_user[2],
+            "username" : registered_user[3],
+            "password" : registered_user[4],
+            "admin" : registered_user[5],
+            "registered_by" :  registered_user[6],
+            "registered_on" : registered_user[7]
+        }
+
+        return user
