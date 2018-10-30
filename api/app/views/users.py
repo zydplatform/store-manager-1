@@ -36,3 +36,15 @@ def add_new_user():
 
     except ValueError:
         return jsonify({"message": "Provide User details"})
+
+@app.route('/api/v1/users/', methods=['GET'])
+def view_all_users():
+    """ get all registered users"""
+
+    user_class = User()
+    users = user_class.get_all_registered_users()
+
+    if len(users) == 0:
+        return jsonify({"message": "No users registered yet"}), 404
+
+    return jsonify({"users": users}), 200
