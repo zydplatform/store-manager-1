@@ -29,7 +29,7 @@ class Database:
                 full_name VARCHAR (50) NOT NULL, 
                 username VARCHAR (30) NOT NULL, 
                 password VARCHAR (50) NOT NULL,  
-                admin BOOLEAN NOT NULL DEFAULT TRUE, 
+                admin BOOLEAN NOT NULL DEFAULT FALSE, 
                 registered_by INT NOT NULL,  
                 registered_on TIMESTAMP DEFAULT NOW());
             """,
