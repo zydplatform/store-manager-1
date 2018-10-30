@@ -42,4 +42,29 @@ class User(Database):
             self.connection.commit()
             return True
     
+    def get_all_registered_users(self):
+        """ get all registered users from database """
 
+        get_registered_attendant_query = "SELECT * FROM users"
+        self.cursor.execute(get_registered_attendant_query)
+        registered_users = self.cursor.fetchall()
+
+        if registered_users == None:
+            return {}
+        
+        users = []
+
+        for registered_user in registered_users:
+            user = {
+                "user_id" : registered_user[0],
+                "id_number" : registered_user[1],
+                "full_name" : registered_user[2],
+                "username" : registered_user[3],
+                "password" : registered_user[4],
+                "admin" : registered_user[5],
+                "registered_by" :  registered_user[6],
+                "registered_on" : registered_user[7]
+            }
+            users.append(user)
+
+        return users
