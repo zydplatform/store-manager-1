@@ -118,3 +118,17 @@ class User(Database):
             self.connection.commit()
 
             return username
+
+    def remove_a_specific_user(self, user_id):
+        """ delete or remove a specific user """
+
+        get_a_registered_attendant_query = "SELECT * FROM users WHERE user_id = %s"
+        self.cursor.execute(get_a_registered_attendant_query, str(user_id))
+        registered_user = self.cursor.fetchone()
+        username = registered_user[3]
+
+        delete_a_user_query = "DELETE FROM users WHERE user_id = %s"
+        self.cursor.execute(delete_a_user_query, str(user_id))
+        self.connection.commit()
+
+        return username

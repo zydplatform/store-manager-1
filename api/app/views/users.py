@@ -105,3 +105,16 @@ def edit_a_speific_user_details(user_id):
                     return jsonify({"message": f"User {data['username']} not updated"}), 200
     except:
         abort(500)
+
+    
+@app.route('/api/v1/users/<int:user_id>', methods=['DELETE'])
+def delete_astore_attendant(user_id):
+
+    user_class = User()
+    user = user_class.get_a_registered_user_by_id(user_id)
+
+    if len(user) == 0:
+        return jsonify({"message": f"The attendant doesn't exist"}), 404
+    else:
+        deleted_user = user_class.remove_a_specific_user(user_id)    
+        return jsonify({"message": f"{deleted_user} removed"}), 200
