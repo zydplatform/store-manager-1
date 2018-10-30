@@ -1,5 +1,4 @@
 
-from api.app.models import  products, product_categories, sales
 
 class Sales:
 

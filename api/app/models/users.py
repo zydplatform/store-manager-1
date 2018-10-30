@@ -132,3 +132,16 @@ class User(Database):
         self.connection.commit()
 
         return username
+
+    def user_login(self, username, password):
+        """ checking a user login credentials """
+
+        check_user_credentials_query = "SELECT username, password, admin FROM users WHERE username = %s AND password = %s;"
+
+        self.cursor.execute(check_user_credentials_query, (username, password))    
+        login_user = self.cursor.fetchone()
+
+        if login_user == None:
+            return False
+        else:
+            return login_user

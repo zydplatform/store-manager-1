@@ -1,7 +1,6 @@
 
 
 from flask import jsonify
-from api.app.models import  products, product_categories
 from api.app.models.database import Database
 
 class ProductCategories(Database):

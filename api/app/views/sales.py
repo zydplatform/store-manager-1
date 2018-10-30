@@ -1,7 +1,7 @@
 
 from flask import jsonify, abort, request
 from api.app import app
-from api.app.models import sales, MINIMUM_STOCK_ALLOWED
+from api.app.models import MINIMUM_STOCK_ALLOWED
 from api.app.models.sales import Sales
 
 
