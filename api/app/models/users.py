@@ -91,3 +91,30 @@ class User(Database):
         }
 
         return user
+
+    def update_a_user_details(self, user_id, id_number, full_name, username, password, admin, registered_by):
+        """ modify a specific user details """
+
+        get_a_registered_attendant_query = "SELECT * FROM users WHERE user_id = %s"
+        self.cursor.execute(get_a_registered_attendant_query, str(user_id))
+        registered_user = self.cursor.fetchone()
+        username = registered_user[3]
+
+        if len(registered_user) == 0:
+            return False
+        else:
+            update_user_query = """
+                UPDATE users SET 
+                id_number = %s,
+                full_name = %s,
+                username = %s,
+                password = %s,
+                admin = %s,
+                registered_by = %s
+                WHERE user_id = %s
+            """
+
+            self.cursor.execute(update_user_query, (id_number, full_name, username, password, admin, registered_by, str(user_id)))
+            self.connection.commit()
+
+            return username

@@ -59,3 +59,49 @@ def view_a_registered_user_details(user_id):
         return jsonify({"message": f"The User doesn't exist"}), 404
 
     return jsonify({"user": user}), 200
+
+@app.route('/api/v1/users/<int:user_id>', methods=['PUT'])
+def edit_a_speific_user_details(user_id):
+    data = request.json
+
+    try:
+        user_class = User()
+        user = user_class.get_a_registered_user_by_id(user_id)
+
+        if len(user) == 0:
+            return jsonify({"message": f"The User doesn't exist"}), 404
+        else:
+            if ("id_number" not in data or data["id_number"] == ""):
+                return jsonify({"error": "Provide User ID number"})
+            elif (isinstance(data["id_number"], (int, float))):
+                return jsonify({"error": "Invalid User ID Number"})
+
+            if ("full_name" not in data or data["full_name"] == ""):
+                return jsonify({"error": "Provide User Full name"})
+            elif (isinstance(data["full_name"], (int, float))):
+                return jsonify({"error": "Invalid User Full Name"})
+
+            if ("username" not in data or data["username"] == ""):
+                return jsonify({"error": "Provide User username"})
+            elif (isinstance(data["username"], (int, float))):
+                return jsonify({"error": "Invalid User username"})
+
+            if ("password" not in data or data["password"] == ""):
+                return jsonify({"error": "Provide User password"})
+
+            user_class = User()
+            user = user_class.get_a_registered_user_by_id(user_id)
+
+            if len(user) == 0:
+                return jsonify({"message": f"The User doesn't exist"}), 404
+            else:
+                updated_user = user_class.update_a_user_details(
+                    user_id, data["id_number"], data["full_name"], data["username"], data["password"], "FALSE", 1
+                )
+
+                if updated_user:
+                    return jsonify({"message": f"User {updated_user} updated"}), 200
+                else:
+                    return jsonify({"message": f"User {data['username']} not updated"}), 200
+    except:
+        abort(500)
