@@ -193,3 +193,11 @@ def user_login():
     else:
         return jsonify({"message": "Wrong login Credentials"}), 404
 
+@app.route('/api/v1/auth/logout', methods=['GET'])
+@jwt_required
+def user_logout():
+    """ logging a user out of the system """
+
+    logged_in_user = get_jwt_identity()
+
+    return jsonify({"message": f"{logged_in_user} Logged out"}), 200
