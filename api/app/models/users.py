@@ -1,51 +1,45 @@
+""" User file for handling user operations """
 
-from api.app.models import  attendants
+from api.app.models.database import Database
 
-class Attendants:
+class User(Database):
+    """ User Class for handling users """
 
-    def __init__(self, id_number, attendant_name, attendant_username, attendant_password):
-        self.id_number = id_number
-        self.attendant_name = attendant_name
-        self.attendant_username = attendant_username
-        self.attendant_password = attendant_password
+    def __init__(self):
+        """ initialising User """
+        super().__init__()
 
-    def add_store_attendant(self):
+    def register_user(self, id_number, full_name, username, password):
         attendant = {
-            "attendant_id" : len(attendants) + 1,
-            "id_number" : self.id_number,
-            "attendant_name" : self.attendant_name,
-            "attendant_username" : self.attendant_username,
-            "attendant_password" : self.attendant_password
+            "id_number" : id_number,
+            "fullname" : full_name,
+            "username" : username,
+            "password" : password
         }
+
+        get_registered_attendant_query = "SELECT * FROM users"
+
+        self.cursor.execute(get_registered_attendant_query)
+
+        attendants = self.cursor.fetchall()
 
         if attendant in attendants or [
                                     attendant for attendant in attendants
-                                    if attendant["id_number"] ==  self.id_number
-                                    and attendant["attendant_name"] ==  self.attendant_name
-                                    and attendant["attendant_username"] == self.attendant_username
-                                    and attendant["attendant_password"] ==  self.attendant_password
+                                    if attendant[0] ==  id_number
+                                    and attendant[3] == username
                                 ]:
             return False
 
         else:
-            attendants.append(attendant)
+            register_attendant_query = """
+                INSERT INTO users
+                (id_number, full_name, username, password, registered_by)
+                VALUES (%s, %s, %s, %s, %s);
+            """
+            self.cursor.execute(register_attendant_query, 
+                (id_number, full_name, username, password, 0)
+            )
+            self.connection.commit()
             return True
     
-    def update_store_attendant(self, attendant):
-        if len(attendant) == 0:
-            return False
-        else:
-            if attendant[0]["id_number"] != self.id_number:
-                attendant[0]["id_number"] = self.id_number
-
-            if attendant[0]["attendant_name"] != self.attendant_name:
-                attendant[0]["attendant_name"] = self.attendant_name
-
-            if attendant[0]["attendant_username"] != self.attendant_username:
-                attendant[0]["attendant_username"] = self.attendant_username
-
-            if attendant[0]["attendant_password"] != self.attendant_password:
-                attendant[0]["attendant_password"] = self.attendant_password
-
-        return True
 

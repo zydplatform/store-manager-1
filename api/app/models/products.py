@@ -1,27 +1,35 @@
 
+
 from flask import jsonify
 from api.app.models import  products, product_categories
+from api.app.models.database import Database
 
-class ProductCategories:
+class ProductCategories(Database):
 
     def __init__(self, category_name):
         self.category_name = category_name
 
     def add_product_category(self):
-        category = {
-            "category_id" : len(product_categories) + 1,
-            "category_name" : self.category_name
-        }
 
-        if category in product_categories or [
-                                    category for category in product_categories
-                                    if category["category_name"] ==  self.category_name
-                                ]:
+        try:
+            get_added_products_query = "SELECT * FROM product_categories"
+            self.cursor.execute(get_added_products_query)
+            product_categories = self.cursor.fetchall()
+
+            if self.category_name in product_categories:
+                return False
+            else:
+                add_product_category_query = """
+                        INSERT INTO product_categories
+                        (category_name, added_by)
+                        VALUES(self.category_name, 1)
+                    """
+                self.cursor.execute(add_product_category_query)
+                return True
+            
+        except:
             return False
-
-        else:
-            product_categories.append(category)
-            return True
+        
 
 
     def update_product_category(self, category):
@@ -33,7 +41,7 @@ class ProductCategories:
 
             return True
 
-class Products:
+class Products(Database):
 
     def __init__(self, product_name, product_category, product_price, product_quantity, product_minimum_stock_allowed):
         self.product_name = product_name
