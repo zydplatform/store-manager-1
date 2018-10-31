@@ -196,7 +196,7 @@ def user_login():
                 "username" : user[1]
             }
 
-        token = create_access_token(identity = logged_in, expires_delta = datetime.timedelta(minutes=5))
+        token = create_access_token(identity = logged_in, expires_delta = datetime.timedelta(days=1))
         return jsonify({"message": f"User logged In as {logged_in['role']}", "login_token" : token}), 200
     else:
         return jsonify({"message": "Wrong login Credentials"}), 404

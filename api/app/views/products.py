@@ -61,10 +61,66 @@ def add_product():
         inventory = Product()
 
         if inventory.add_product(product_name, product_category, product_price, product_quantity, product_minimum_stock_allowed, logged_in_user["id"]):
-            return jsonify({"message": "The product has been added in the inventory"}), 200
+            return jsonify({"message": "Product added"}), 200
         else:
-            return jsonify({"message": "The product is already added in the inventory"})
+            return jsonify({"message": "Product exists"})
 
     except ValueError:
         return jsonify({"message": "Provide product details"})
 
+@app.route('/api/v1/products/<int:product_id>', methods=['PUT'])
+@jwt_required
+def edit_aproduct(product_id):
+    data = request.json
+
+    try:
+        logged_in_user = get_jwt_identity()
+
+        if logged_in_user["role"] == "attendant":
+            return jsonify({"message": "Unauthorized Access"})
+
+        inventory = Product()
+
+        product_details = inventory.get_a_product_by_id(product_id)
+
+        product = [product for product in product_details if product_details["product_id"] == product_id]
+
+        if len(product) == 0:
+            return jsonify({"message": f"The product is not available"})
+        else:
+            if ("product_name" not in data or data["product_name"] == ""):
+                return jsonify({"error": "Provide product name"})        
+            
+            if ("product_category" not in data or data["product_category"] == ""):
+                return jsonify({"error": "Provide product category name"})
+            
+            if ("product_price" not in data or data["product_price"] == ""):
+                return jsonify({"error": "Provide product price"})
+            
+            if ("product_quantity" not in data or data["product_quantity"] == ""):
+                return jsonify({"error": "Provide product Quantity"})
+            
+            if ("product_minimum_stock_allowed" not in data or data["product_minimum_stock_allowed"] == None):
+                return jsonify({"error": "Provide the MINIMUM STOCK ALLOWED"})
+
+            updated_product = inventory.update_product(product_id, data["product_name"], data["product_category"], data["product_price"], data["product_quantity"], data["product_minimum_stock_allowed"], logged_in_user["id"])
+            
+            if updated_product:
+                return jsonify({"message": f"{updated_product} updated"}), 200
+            else:
+                return jsonify({"message": f"{updated_product} not updated"}), 500
+    except:
+        abort(500)
+
+
+    inventory = Product()
+
+    product_details = inventory.get_a_product_by_id(product_id)
+
+    product = [product for product in product_details if product_details["product_id"] == product_id]
+
+    if len(product) == 0:
+        return jsonify({"message": f"The product doesn't exist"})
+    else:
+        deleted_product = inventory.remove_a_specific_product(product_id)   
+        return jsonify({"message": f"{deleted_product} removed"}), 200
