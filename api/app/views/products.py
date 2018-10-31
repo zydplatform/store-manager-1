@@ -68,6 +68,20 @@ def add_product():
     except ValueError:
         return jsonify({"message": "Provide product details"})
 
+@app.route('/api/v1/products/', methods=['GET'])
+@jwt_required
+def view_all_products():
+    
+    inventory = Product()
+    products = inventory.get_all_products()
+
+    if len(products) == 0:
+        return jsonify({"message": "No products added Yet"}), 404
+    
+    return jsonify({"Products": products}), 200
+
+
+
 @app.route('/api/v1/products/<int:product_id>', methods=['PUT'])
 @jwt_required
 def edit_aproduct(product_id):
