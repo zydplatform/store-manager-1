@@ -25,7 +25,7 @@ class Database:
         querys = (
             """ CREATE TABLE IF NOT EXISTS users (
                 user_id SERIAL NOT NULL PRIMARY KEY,  
-                id_number VARCHAR (15) NOT NULL, 
+                id_number VARCHAR (15) NOT NULL UNIQUE, 
                 full_name VARCHAR (50) NOT NULL, 
                 username VARCHAR (30) NOT NULL, 
                 password VARCHAR (50) NOT NULL,  
@@ -61,6 +61,26 @@ class Database:
         try:
             for query in querys:
                 self.cursor.execute(query)
+                
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+
+    def create_super_admin_account(self):
+        """ Insert the first admin in the users table """
+
+        try:
+
+            get_registered_users_query = "SELECT * FROM users"
+            self.cursor.execute(get_registered_users_query)
+            registered_users = self.cursor.fetchall()
+
+            if not registered_users:
+                register_admin = """
+                    INSERT INTO users
+                    (id_number, full_name, username, password, registered_by)
+                    VALUES (%s, %s, %s, %s, %s);
+                """
+                self.cursor.execute(register_admin, ("AD/2018/001", "Administrator", "admin", "admin", 0))
                 
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
