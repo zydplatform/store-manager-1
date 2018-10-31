@@ -239,3 +239,16 @@ def edit_aproduct_category(category_id):
     except:
         abort(500)
 
+@app.route('/api/v1/products_categories/<int:category_id>', methods=['DELETE'])
+@jwt_required
+def delete_aproduct_category(category_id):
+
+    inventory = ProductCategory()
+
+    product_category_details = inventory.get_a_product_category_by_id(category_id)
+
+    if len(product_category_details) == 0:
+        return jsonify({"message": f"The product category doesn't exist"})
+    else:
+        deleted_category = inventory.remove_a_specific_product_category(category_id)   
+        return jsonify({"message": f"{deleted_category} removed"}), 200
