@@ -80,7 +80,17 @@ def view_all_products():
     
     return jsonify({"Products": products}), 200
 
+@app.route('/api/v1/products/<int:product_id>/', methods=['GET'])
+@jwt_required
+def view_aproduct_details(product_id):
 
+    inventory = Product()
+    product = inventory.get_a_product_by_id(product_id)
+
+    if len(product) == 0:
+        return jsonify({"message": f"The product doesn't exist"})
+
+    return jsonify({"Product": product}), 200
 
 @app.route('/api/v1/products/<int:product_id>', methods=['PUT'])
 @jwt_required
