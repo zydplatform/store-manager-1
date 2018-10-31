@@ -123,4 +123,59 @@ class Product(Database):
 
             self.connection.commit()
 
-            return product       
+            return product     
+
+    def remove_a_specific_product(self, product_id):
+        """ delete or remove a specific product """
+
+        get_a_product_query = "SELECT * FROM products WHERE product_id = %s"
+        self.cursor.execute(get_a_product_query, str(product_id))
+        product = self.cursor.fetchone()
+        product_name = product[1]
+
+        delete_a_product_query = "DELETE FROM products WHERE product_id = %s"
+        self.cursor.execute(delete_a_product_query, str(product_id))
+        self.connection.commit()
+
+        return product_name  
+
+class ProductCategory(Database):
+    """ Product Category Class for handling product category """
+
+    def __init__(self):
+        """ Initalizing the product category """
+        
+        super().__init__()
+
+
+    def add_product_category(self, category_name, added_by):
+        category = {
+            "category_name" : category_name
+        }
+
+        get_all_product_categoriess_query = "SELECT * FROM product_categories"
+
+        self.cursor.execute(get_all_product_categoriess_query)
+
+        product_categories = self.cursor.fetchall()
+
+        if category in product_categories or [
+                                    product_category for product_category in product_categories
+                                    if product_category[1].lower() == category_name.lower()
+                                ]:
+            return False
+
+        else:
+            add_product_category_query = """
+                INSERT INTO product_categories
+                (category_name, added_by)
+                VALUES (%s, %s);
+            """
+            self.cursor.execute(add_product_category_query, 
+                (category_name, added_by)
+            )
+            self.connection.commit()
+            return True   
+
+    
+    
