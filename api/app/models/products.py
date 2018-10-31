@@ -178,4 +178,27 @@ class ProductCategory(Database):
             return True   
 
     
+    def get_all_product_categories(self):
+        """ get all product categories from database """
+
+        get_categories_query = "SELECT * FROM product_categories"
+        self.cursor.execute(get_categories_query)
+        all_product_categories = self.cursor.fetchall()
+
+        if all_product_categories == None:
+            return {}
+        
+        product_categories = []
+
+        for product_category in all_product_categories:
+            category = {
+                "category_id" : product_category[0],
+                "category_name" : product_category[1],
+                "added_by" : product_category[2],
+                "added_on" : product_category[3]
+            }
+            product_categories.append(category)
+
+        return product_categories
+    
     
