@@ -201,4 +201,21 @@ class ProductCategory(Database):
 
         return product_categories
     
-    
+    def get_a_product_category_by_id(self, category_id):
+        """ get a specific product category from the database """
+
+        get_a_product_category_query = "SELECT * FROM product_categories WHERE category_id = %s"
+        self.cursor.execute(get_a_product_category_query, str(category_id))
+        product_category_details = self.cursor.fetchone()
+            
+        if product_category_details == None:
+            return {}
+        
+        product_category = {
+            "category_id" : product_category_details[0],
+            "category_name" : product_category_details[1],
+            "added_by" : product_category_details[2],
+            "added_on" : product_category_details[3]
+        }
+
+        return product_category

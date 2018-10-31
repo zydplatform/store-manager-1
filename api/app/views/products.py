@@ -194,3 +194,15 @@ def view_all_product_categories():
 
     return jsonify({"Product_categories" : product_categories}), 200
 
+@app.route('/api/v1/products_categories/<int:category_id>/', methods=['GET'])
+@jwt_required
+def view_aproduct_category_details(category_id):
+
+    inventory = ProductCategory()
+    product_category = inventory.get_a_product_category_by_id(category_id)
+
+    if len(product_category) == 0:
+        return jsonify({"message": "Product category does not exist"})
+
+    return jsonify({"Product_category" : product_category}), 200
+
