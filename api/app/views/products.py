@@ -4,7 +4,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import jsonify, abort, request
 from api.app import app
 from api.app.models import MINIMUM_STOCK_ALLOWED
-from api.app.models.products import Product
+from api.app.models.products import Product, ProductCategory
 
 
 @app.route('/api/v1/products', methods=['POST'])
@@ -136,6 +136,8 @@ def edit_aproduct(product_id):
     except:
         abort(500)
 
+@app.route('/api/v1/products/<int:product_id>', methods=['DELETE'])
+def delete_aproduct(product_id):
 
     inventory = Product()
 
@@ -149,16 +151,34 @@ def edit_aproduct(product_id):
         deleted_product = inventory.remove_a_specific_product(product_id)   
         return jsonify({"message": f"{deleted_product} removed"}), 200
 
-    def remove_a_specific_product(self, product_id):
-        """ delete or remove a specific product """
 
-        get_a_product_query = "SELECT * FROM products WHERE product_id = %s"
-        self.cursor.execute(get_a_product_query, str(product_id))
-        product = self.cursor.fetchone()
-        product_name = product[1]
 
-        delete_a_product_query = "DELETE FROM products WHERE product_id = %s"
-        self.cursor.execute(delete_a_product_query, str(product_id))
-        self.connection.commit()
+@app.route('/api/v1/products_categories', methods=['POST'])
+@jwt_required
+def add_product_category():
 
-        return product_name
+    logged_in_user = get_jwt_identity()
+
+    if logged_in_user["role"] == "attendant":
+        return jsonify({"message": "Unauthorized Access"})
+
+    data = request.json
+    try:
+        if ("category_name" not in data or data["category_name"] == ""):
+            return jsonify({"error": "Provide product category name"})
+        elif (isinstance(data["category_name"], str)):
+            category_name = data["category_name"]
+        elif (isinstance(data["category_name"], int)):
+            return jsonify({"error": "Invalid product category name"})
+
+        category_name = data["category_name"]
+
+        inventory = ProductCategory()
+
+        if inventory.add_product_category(category_name, logged_in_user["id"]):
+            return jsonify({"message": "Product category added"}), 200
+        else:
+            return jsonify({"message": "Product category exists"})
+    except ValueError:
+        return jsonify({"message": "Provide product category details"})
+
