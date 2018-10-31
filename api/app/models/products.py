@@ -219,3 +219,26 @@ class ProductCategory(Database):
         }
 
         return product_category
+
+    def update_product_category(self, category_id, category_name, added_by):
+        """ modify a specific product category details """
+
+        get_a_product_category_query = "SELECT * FROM product_categories WHERE category_id = %s"
+        self.cursor.execute(get_a_product_category_query, str(category_id))
+        product_category_details = self.cursor.fetchone()
+
+        if len(product_category_details) == 0:
+            return False
+        else:
+            update_product_category_query = """
+                UPDATE product_categories SET 
+                category_name = %s,
+                added_by = %s
+                WHERE category_id = %s
+            """
+
+            self.cursor.execute(update_product_category_query, (category_name, added_by, category_id))
+
+            self.connection.commit()
+
+            return product_category_details[1]

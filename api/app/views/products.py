@@ -206,3 +206,36 @@ def view_aproduct_category_details(category_id):
 
     return jsonify({"Product_category" : product_category}), 200
 
+@app.route('/api/v1/products_categories/<int:category_id>', methods=['PUT'])
+@jwt_required
+def edit_aproduct_category(category_id):
+    data = request.json
+
+    try:
+
+        logged_in_user = get_jwt_identity()
+
+        if logged_in_user["role"] == "attendant":
+            return jsonify({"message": "Unauthorized Access"})
+
+        if ("category_name" not in data or data["category_name"] == ""):
+            return jsonify({"error": "Provide product category name"})
+        elif (isinstance(data["category_name"], str)):
+            category_name = data["category_name"]
+        elif (isinstance(data["category_name"], int)):
+            return jsonify({"error": "Invalid product category name"})
+
+        inventory = ProductCategory()
+
+        product_category_details = inventory.get_a_product_category_by_id(category_id)
+
+        if len(product_category_details) == 0:
+            return jsonify({"message": "The product category does not exist"})
+        else:
+            if inventory.update_product_category(category_id, category_name, logged_in_user["id"]):
+                return jsonify({"message": f"{product_category_details['category_name']} updated"}), 200
+            else:
+                return jsonify({"message": f"Product category {product_category_details['category_name']} was not updated"})
+    except:
+        abort(500)
+
