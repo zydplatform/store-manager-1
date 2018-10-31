@@ -148,3 +148,17 @@ def edit_aproduct(product_id):
     else:
         deleted_product = inventory.remove_a_specific_product(product_id)   
         return jsonify({"message": f"{deleted_product} removed"}), 200
+
+    def remove_a_specific_product(self, product_id):
+        """ delete or remove a specific product """
+
+        get_a_product_query = "SELECT * FROM products WHERE product_id = %s"
+        self.cursor.execute(get_a_product_query, str(product_id))
+        product = self.cursor.fetchone()
+        product_name = product[1]
+
+        delete_a_product_query = "DELETE FROM products WHERE product_id = %s"
+        self.cursor.execute(delete_a_product_query, str(product_id))
+        self.connection.commit()
+
+        return product_name
