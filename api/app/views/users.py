@@ -19,7 +19,7 @@ def add_new_user():
 
     logged_in_user = get_jwt_identity()
 
-    if logged_in_user == "attendant":
+    if logged_in_user["role"] == "attendant":
         return jsonify({"message": "Unauthorized Access"})
 
     data = request.json
@@ -59,7 +59,7 @@ def view_all_users():
 
     logged_in_user = get_jwt_identity()
 
-    if logged_in_user == "attendant":
+    if logged_in_user["role"] == "attendant":
         return jsonify({"message": "Unauthorized Access"})
 
     user_class = User()
@@ -77,7 +77,7 @@ def view_a_registered_user_details(user_id):
 
     logged_in_user = get_jwt_identity()
 
-    if logged_in_user == "attendant":
+    if logged_in_user["role"] == "attendant":
         return jsonify({"message": "Unauthorized Access"})
 
     user_class = User()
@@ -95,7 +95,7 @@ def edit_a_speific_user_details(user_id):
 
     logged_in_user = get_jwt_identity()
 
-    if logged_in_user == "attendant":
+    if logged_in_user["role"] == "attendant":
         return jsonify({"message": "Unauthorized Access"})
 
     data = request.json
@@ -145,19 +145,19 @@ def edit_a_speific_user_details(user_id):
     
 @app.route('/api/v1/users/<int:user_id>', methods=['DELETE'])
 @jwt_required
-def delete_astore_attendant(user_id):
+def delete_a_registered_user(user_id):
     """ Remove or delete a specific user """
 
     logged_in_user = get_jwt_identity()
 
-    if logged_in_user == "attendant":
+    if logged_in_user["role"] == "attendant":
         return jsonify({"message": "Unauthorized Access"})
 
     user_class = User()
     user = user_class.get_a_registered_user_by_id(user_id)
 
     if len(user) == 0:
-        return jsonify({"message": "The attendant doesn't exist"}), 404
+        return jsonify({"message": "The User doesn't exist"}), 404
     else:
         deleted_user = user_class.remove_a_specific_user(user_id)    
         return jsonify({"message": f"{deleted_user} removed"}), 200
@@ -183,21 +183,29 @@ def user_login():
     user = user_class.user_login(username, password)
 
     if user:
-        if user[2]:
-            role = "admin"
+        if user[3] is True:
+            logged_in = { 
+                "role" : "admin",
+                "id": user[0],
+                "username" : user[1]
+            }
         else:
-            role = "attendant"
+            logged_in = { 
+                "role" : "attendant",
+                "id" : user[0],
+                "username" : user[1]
+            }
 
-        token = create_access_token(identity = role, expires_delta = datetime.timedelta(minutes=5))
-        return jsonify({"message": f"User logged In as {role}", "login_token" : token}), 200
+        token = create_access_token(identity = logged_in, expires_delta = datetime.timedelta(minutes=5))
+        return jsonify({"message": f"User logged In as {logged_in['role']}", "login_token" : token}), 200
     else:
         return jsonify({"message": "Wrong login Credentials"}), 404
 
-@app.route('/api/v1/auth/logout', methods=['GET'])
+@app.route('/api/v1/auth/logout', methods=['DELETE'])
 @jwt_required
 def user_logout():
     """ logging a user out of the system """
 
     logged_in_user = get_jwt_identity()
 
-    return jsonify({"message": f"{logged_in_user} Logged out"}), 200
+    return jsonify({"message": f"{logged_in_user['username']} Logged out"}), 200

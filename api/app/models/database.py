@@ -35,14 +35,14 @@ class Database:
             """,
             """ CREATE TABLE IF NOT EXISTS product_categories (
                 category_id SERIAL NOT NULL PRIMARY KEY,  
-                category_name VARCHAR (20) NOT NULL, 
+                category_name VARCHAR (20) NOT NULL UNIQUE, 
                 added_by INT NOT NULL REFERENCES users(user_id) ON DELETE RESTRICT, 
                 added_on TIMESTAMP DEFAULT NOW());
             """,
             """ CREATE TABLE IF NOT EXISTS products (
                 product_id SERIAL NOT NULL PRIMARY KEY,  
-                product_name VARCHAR (30) NOT NULL, 
-                product_category INT NOT NULL REFERENCES product_categories(category_id) ON DELETE RESTRICT, 
+                product_name VARCHAR (30) NOT NULL UNIQUE, 
+                product_category INT REFERENCES product_categories(category_id) ON DELETE RESTRICT, 
                 product_price INT NOT NULL,
                 product_quantity INT NOT NULL,
                 product_minimum_stock_allowed INT NOT NULL,
