@@ -8,3 +8,7 @@ __pycache__/
 .vscode
 
 .vscode/
+
+.venv/
+
+venv
