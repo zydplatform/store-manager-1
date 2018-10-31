@@ -182,3 +182,15 @@ def add_product_category():
     except ValueError:
         return jsonify({"message": "Provide product category details"})
 
+@app.route('/api/v1/products_categories', methods=['GET'])
+@jwt_required
+def view_all_product_categories():
+    
+    inventory = ProductCategory()
+    product_categories = inventory.get_all_product_categories()
+
+    if len(product_categories) == 0:
+        return jsonify({"message": "No product categories added yet"})
+
+    return jsonify({"Product_categories" : product_categories}), 200
+
