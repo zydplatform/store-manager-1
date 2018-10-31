@@ -9,34 +9,35 @@ class User(Database):
         """ initialising User """
         super().__init__()
 
+
     def register_user(self, id_number, full_name, username, password):
-        attendant = {
+        user = {
             "id_number" : id_number,
             "fullname" : full_name,
             "username" : username,
             "password" : password
         }
 
-        get_registered_attendant_query = "SELECT * FROM users"
+        get_all_registered_users_query = "SELECT * FROM users"
 
-        self.cursor.execute(get_registered_attendant_query)
+        self.cursor.execute(get_all_registered_users_query)
 
-        attendants = self.cursor.fetchall()
+        registered_users = self.cursor.fetchall()
 
-        if attendant in attendants or [
-                                    attendant for attendant in attendants
-                                    if attendant[0] ==  id_number
-                                    and attendant[3] == username
+        if user in registered_users or [
+                                    registered_user for registered_user in registered_users
+                                    if registered_user[0] ==  id_number
+                                    and registered_user[3] == username
                                 ]:
             return False
 
         else:
-            register_attendant_query = """
+            register_user_query = """
                 INSERT INTO users
                 (id_number, full_name, username, password, registered_by)
                 VALUES (%s, %s, %s, %s, %s);
             """
-            self.cursor.execute(register_attendant_query, 
+            self.cursor.execute(register_user_query, 
                 (id_number, full_name, username, password, 0)
             )
             self.connection.commit()
@@ -45,8 +46,8 @@ class User(Database):
     def get_all_registered_users(self):
         """ get all registered users from database """
 
-        get_registered_attendant_query = "SELECT * FROM users"
-        self.cursor.execute(get_registered_attendant_query)
+        get_registered_users_query = "SELECT * FROM users"
+        self.cursor.execute(get_registered_users_query)
         registered_users = self.cursor.fetchall()
 
         if registered_users == None:
@@ -72,8 +73,8 @@ class User(Database):
     def get_a_registered_user_by_id(self, user_id):
         """ get a specific user from the database """
 
-        get_a_registered_attendant_query = "SELECT * FROM users WHERE user_id = %s"
-        self.cursor.execute(get_a_registered_attendant_query, str(user_id))
+        get_a_registered_user_query = "SELECT * FROM users WHERE user_id = %s"
+        self.cursor.execute(get_a_registered_user_query, str(user_id))
         registered_user = self.cursor.fetchone()
             
         if registered_user == None:
@@ -95,8 +96,8 @@ class User(Database):
     def update_a_user_details(self, user_id, id_number, full_name, username, password, admin, registered_by):
         """ modify a specific user details """
 
-        get_a_registered_attendant_query = "SELECT * FROM users WHERE user_id = %s"
-        self.cursor.execute(get_a_registered_attendant_query, str(user_id))
+        get_a_registered_user_query = "SELECT * FROM users WHERE user_id = %s"
+        self.cursor.execute(get_a_registered_user_query, str(user_id))
         registered_user = self.cursor.fetchone()
         username = registered_user[3]
 
@@ -122,8 +123,8 @@ class User(Database):
     def remove_a_specific_user(self, user_id):
         """ delete or remove a specific user """
 
-        get_a_registered_attendant_query = "SELECT * FROM users WHERE user_id = %s"
-        self.cursor.execute(get_a_registered_attendant_query, str(user_id))
+        get_a_registered_user_query = "SELECT * FROM users WHERE user_id = %s"
+        self.cursor.execute(get_a_registered_user_query, str(user_id))
         registered_user = self.cursor.fetchone()
         username = registered_user[3]
 
@@ -136,7 +137,7 @@ class User(Database):
     def user_login(self, username, password):
         """ checking a user login credentials """
 
-        check_user_credentials_query = "SELECT username, password, admin FROM users WHERE username = %s AND password = %s;"
+        check_user_credentials_query = "SELECT user_id, username, password, admin FROM users WHERE username = %s AND password = %s;"
 
         self.cursor.execute(check_user_credentials_query, (username, password))    
         login_user = self.cursor.fetchone()
