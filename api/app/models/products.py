@@ -27,7 +27,7 @@ class Product(Database):
 
         if product in products or [
                                     product for product in products
-                                    if product[1].lower() == product_name.
+                                    if product[1].lower() == product_name.lower()
                                 ]:
             return False
 
@@ -124,17 +124,3 @@ class Product(Database):
             self.connection.commit()
 
             return product       
-
-    def remove_a_specific_product(self, product_id):
-        """ delete or remove a specific product """
-
-        get_a_product_query = "SELECT * FROM products WHERE product_id = %s"
-        self.cursor.execute(get_a_product_query, str(product_id))
-        product = self.cursor.fetchone()
-        product_name = product[1]
-
-        delete_a_product_query = "DELETE FROM products WHERE product_id = %s"
-        self.cursor.execute(delete_a_product_query, str(product_id))
-        self.connection.commit()
-
-        return product_name
