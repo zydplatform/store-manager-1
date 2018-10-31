@@ -242,3 +242,17 @@ class ProductCategory(Database):
             self.connection.commit()
 
             return product_category_details[1]
+
+    def remove_a_specific_product_category(self, category_id):
+        """ delete or remove a specific product category """
+
+        get_a_product_category_query = "SELECT * FROM product_categories WHERE category_id = %s"
+        self.cursor.execute(get_a_product_category_query, str(category_id))
+        product_category = self.cursor.fetchone()
+        product_category_name = product_category[1]
+
+        delete_a_product_category_query = "DELETE FROM product_categories WHERE category_id = %s"
+        self.cursor.execute(delete_a_product_category_query, str(category_id))
+        self.connection.commit()
+        
+        return product_category_name
