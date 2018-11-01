@@ -1,6 +1,7 @@
 """ Handling Databases"""
 
 import psycopg2
+from werkzeug.security import generate_password_hash
 
 class Database:
     """ Class For Handling Databases """
@@ -74,12 +75,13 @@ class Database:
             registered_users = self.cursor.fetchall()
 
             if not registered_users:
+                password = generate_password_hash("admin")
                 register_admin = """
                     INSERT INTO users
                     (full_name, email, password, admin, registered_by)
-                    VALUES (%s, %s, %s, %s);
+                    VALUES (%s, %s, %s, %s, %s);
                 """
-                self.cursor.execute(register_admin, ("Administrator", "admin@api.com", generate_password_hash("admin"), TRUE, 0))
+                self.cursor.execute(register_admin, ("Administrator", "admin@api.com", password, True, 0))
                 
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)

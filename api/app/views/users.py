@@ -124,6 +124,11 @@ def edit_a_speific_user_details(user_id):
             elif (isinstance(data["email"], (int, float))):
                 return jsonify({"error": "Invalid User email"}), 400
 
+            if ("admin" not in data or data["admin"] == ""):
+                return jsonify({"error": "Provide User role"}), 400
+            elif (isinstance(data["admin"], (int, float))):
+                return jsonify({"error": "Invalid User role"}), 400
+
             if ("password" not in data or data["password"] == ""):
                 return jsonify({"error": "Provide User password"}), 400
 
@@ -134,7 +139,7 @@ def edit_a_speific_user_details(user_id):
                 return jsonify({"message": "The User doesn't exist"}), 404
             else:
                 updated_user = user_class.update_a_user_details(
-                    user_id, data["full_name"], data["email"], data["password"], "FALSE",  logged_in_user["id"]
+                    user_id, data["full_name"], data["email"], generate_password_hash(data["password"]), data["admin"],  logged_in_user["id"]
                 )
 
                 if updated_user:
