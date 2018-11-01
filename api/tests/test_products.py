@@ -9,74 +9,18 @@ class ProductsTestCase(TestCase):
         self.tester = app.test_client()
 
     def test_add_aproduct(self):
-        response = self.tester.post('/api/v1/products/', 
+        response = self.tester.post('/api/v1/products', 
             content_type="application/json", 
             data=json.dumps(
                 dict(
-                    product_name = "Melon",
-                    product_category = "Fruits",
-                    product_price = 5000,
-                    product_quantity = 26,
-                    product_minimum_stock_allowed = 20
+                    product_name = "grapes",
+                    product_category = 1,
+                    product_price = 1000,
+                    product_quantity = 45,
+                    product_minimum_stock_allowed = 10
+
                 )
             )
         )
         self.assertEqual(response.status_code, 200)
 
-    def test_get_all_products(self):
-        response = self.tester.get('/api/v1/products/')
-        self.assertEqual(response.status_code, 200)
-    
-    def test_get_one_product(self):
-        response = self.tester.get('/api/v1/products/1/')
-        self.assertEqual(response.status_code, 200)
-    
-    def test_edit_aproduct_details(self):
-        response = self.tester.put('/api/v1/products/1', 
-            content_type="application/json", 
-            data=json.dumps(
-                dict(
-                    product_name = "Cabbage",
-                    product_category = "Vegetables",
-                    product_price = 1500,
-                    product_quantity = 13,
-                    product_minimum_stock_allowed = 5
-                )
-            )
-        )
-        self.assertEqual(response.status_code, 200)
-
-    def test_delete_aproduct(self):
-        response = self.tester.delete('/api/v1/products/2')
-        self.assertEqual(response.status_code, 200)
-    
-    def test_add_aproduct_category(self):
-        response = self.tester.post('/api/v1/products_categories/',
-            content_type="application/json", 
-            data = json.dumps(
-                dict( category_name = "Drinks" )
-            )
-        )
-        self.assertEqual(response.status_code, 200)
-
-
-    def test_get_all_product_categories(self):
-        response = self.tester.get('/api/v1/products_categories/')
-        self.assertEqual(response.status_code, 200)
-
-    def test_get_aspecific_product_category(self):
-        response = self.tester.get('/api/v1/products_categories/1/')
-        self.assertEqual(response.status_code, 200)
-
-    def test_admin_edit_aspecific_product_category_details(self):
-        response = self.tester.put('/api/v1/products_categories/1', 
-            content_type="application/json", 
-            data = json.dumps(
-                dict( category_name = "House Holds" )
-            )
-        )
-        self.assertEqual(response.status_code, 200)
-
-    def test_admin_delete_aproduct_category(self):
-        response = self.tester.delete('/api/v1/products_categories/2')
-        self.assertEqual(response.status_code, 200)

@@ -256,3 +256,5 @@ class ProductCategory(Database):
         self.connection.commit()
         
         return product_category_name
+
+    

@@ -2,6 +2,7 @@
 
 import datetime
 
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import ( 
     jwt_required, 
     create_access_token,
@@ -20,37 +21,42 @@ def add_new_user():
     logged_in_user = get_jwt_identity()
 
     if logged_in_user["role"] == "attendant":
-        return jsonify({"message": "Unauthorized Access"})
+        return jsonify({"message": "Unauthorized Access"}), 401
 
     data = request.json
 
     try:
 
-        if ("id_number" not in data or data["id_number"] == ""):
-            return jsonify({"error": "Provide User ID Number"})
-        elif (isinstance(data["id_number"], str)):
-            id_number = data["id_number"]
-            username = data["id_number"]
-            password = data["id_number"]
-        else:
-            return jsonify({"error": "Invalid User ID Number"})
-
         if ("full_name" not in data or data["full_name"] == ""):
-            return jsonify({"error": "Provide User Full Name"})
+            return jsonify({"error": "Provide User Full Name"}), 400
         elif (isinstance(data["full_name"], str)):
             full_name = data["full_name"]
         else:
-            return jsonify({"error": "Invalid User Full Name"})
+            return jsonify({"error": "Invalid User Full Name"}), 400
+
+        if ("email" not in data or data["email"] == ""):
+            return jsonify({"error": "Provide a valid user email"}), 400
+        elif (isinstance(data["email"], str)):
+            email = data["email"]
+        else:
+            return jsonify({"error": "Invalid User Email"}), 400
+
+        if ("password" not in data or data["password"] == ""):
+            return jsonify({"error": "Provide User password"}), 400
+        elif (isinstance(data["password"], str)):
+            password = generate_password_hash(data["password"])
+        else:
+            return jsonify({"error": "Invalid User Password"}), 400
 
         users = User()
 
-        if users.register_user(id_number, full_name, username, password):
+        if users.register_user(full_name, email, password, logged_in_user["id"]):
             return jsonify({"message": "New User added"}), 200
         else:
-            return jsonify({"message": "The User is already registered"})
+            return jsonify({"message": "The User exists"}), 404
 
     except ValueError:
-        return jsonify({"message": "Provide User details"})
+        return jsonify({"message": "Provide User details"}), 400
 
 @app.route('/api/v1/users/', methods=['GET'])
 @jwt_required
@@ -60,7 +66,7 @@ def view_all_users():
     logged_in_user = get_jwt_identity()
 
     if logged_in_user["role"] == "attendant":
-        return jsonify({"message": "Unauthorized Access"})
+        return jsonify({"message": "Unauthorized Access"}), 401
 
     user_class = User()
     users = user_class.get_all_registered_users()
@@ -78,7 +84,7 @@ def view_a_registered_user_details(user_id):
     logged_in_user = get_jwt_identity()
 
     if logged_in_user["role"] == "attendant":
-        return jsonify({"message": "Unauthorized Access"})
+        return jsonify({"message": "Unauthorized Access"}), 401
 
     user_class = User()
     user = user_class.get_a_registered_user_by_id(user_id)
@@ -96,7 +102,7 @@ def edit_a_speific_user_details(user_id):
     logged_in_user = get_jwt_identity()
 
     if logged_in_user["role"] == "attendant":
-        return jsonify({"message": "Unauthorized Access"})
+        return jsonify({"message": "Unauthorized Access"}), 401
 
     data = request.json
 
@@ -107,23 +113,19 @@ def edit_a_speific_user_details(user_id):
         if len(user) == 0:
             return jsonify({"message": "The User doesn't exist"}), 404
         else:
-            if ("id_number" not in data or data["id_number"] == ""):
-                return jsonify({"error": "Provide User ID number"})
-            elif (isinstance(data["id_number"], (int, float))):
-                return jsonify({"error": "Invalid User ID Number"})
 
             if ("full_name" not in data or data["full_name"] == ""):
-                return jsonify({"error": "Provide User Full name"})
+                return jsonify({"error": "Provide User Full name"}), 400
             elif (isinstance(data["full_name"], (int, float))):
-                return jsonify({"error": "Invalid User Full Name"})
+                return jsonify({"error": "Invalid User Full Name"}), 400
 
-            if ("username" not in data or data["username"] == ""):
-                return jsonify({"error": "Provide User username"})
-            elif (isinstance(data["username"], (int, float))):
-                return jsonify({"error": "Invalid User username"})
+            if ("email" not in data or data["email"] == ""):
+                return jsonify({"error": "Provide User email"}), 400
+            elif (isinstance(data["email"], (int, float))):
+                return jsonify({"error": "Invalid User email"}), 400
 
             if ("password" not in data or data["password"] == ""):
-                return jsonify({"error": "Provide User password"})
+                return jsonify({"error": "Provide User password"}), 400
 
             user_class = User()
             user = user_class.get_a_registered_user_by_id(user_id)
@@ -132,13 +134,13 @@ def edit_a_speific_user_details(user_id):
                 return jsonify({"message": "The User doesn't exist"}), 404
             else:
                 updated_user = user_class.update_a_user_details(
-                    user_id, data["id_number"], data["full_name"], data["username"], data["password"], "FALSE", 1
+                    user_id, data["full_name"], data["email"], data["password"], "FALSE",  logged_in_user["id"]
                 )
 
                 if updated_user:
                     return jsonify({"message": f"User {updated_user} updated"}), 200
                 else:
-                    return jsonify({"message": f"User {data['username']} not updated"}), 200
+                    return jsonify({"message": f"User {data['full_name']} not updated"}), 200
     except:
         abort(500)
 
@@ -151,7 +153,7 @@ def delete_a_registered_user(user_id):
     logged_in_user = get_jwt_identity()
 
     if logged_in_user["role"] == "attendant":
-        return jsonify({"message": "Unauthorized Access"})
+        return jsonify({"message": "Unauthorized Access"}), 401
 
     user_class = User()
     user = user_class.get_a_registered_user_by_id(user_id)
@@ -168,32 +170,32 @@ def user_login():
 
     data = request.json
 
-    if ("username" not in data or data["username"] == ""):
-        return jsonify({"error": "Provide User username"})
-    elif (isinstance(data["username"], (int, float))):
-        return jsonify({"error": "Invalid User username"})
+    if ("email" not in data or data["email"] == ""):
+        return jsonify({"error": "Provide User email"}), 400
+    elif (isinstance(data["email"], (int, float))):
+        return jsonify({"error": "Invalid User email"}), 400
 
     if ("password" not in data or data["password"] == ""):
-        return jsonify({"error": "Provide User password"})
+        return jsonify({"error": "Provide User password"}), 400
 
-    username = data["username"]
+    email = data["email"]
     password = data["password"]
     
     user_class = User()
-    user = user_class.user_login(username, password)
+    user = user_class.user_login(email)
 
-    if user:
-        if user[3] is True:
+    if check_password_hash(user[3], password):
+        if user[4] is True:
             logged_in = { 
                 "role" : "admin",
                 "id": user[0],
-                "username" : user[1]
+                "full_name" : user[1]
             }
         else:
             logged_in = { 
                 "role" : "attendant",
                 "id" : user[0],
-                "username" : user[1]
+                "full_name" : user[1]
             }
 
         token = create_access_token(identity = logged_in, expires_delta = datetime.timedelta(days=1))
@@ -208,4 +210,4 @@ def user_logout():
 
     logged_in_user = get_jwt_identity()
 
-    return jsonify({"message": f"{logged_in_user['username']} Logged out"}), 200
+    return jsonify({"message": f"{logged_in_user['full_name']} Logged out"}), 200
