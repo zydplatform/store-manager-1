@@ -10,11 +10,10 @@ class User(Database):
         super().__init__()
 
 
-    def register_user(self, id_number, full_name, username, password):
+    def register_user(self, full_name, email, password, registered_by):
         user = {
-            "id_number" : id_number,
             "fullname" : full_name,
-            "username" : username,
+            "email" : email,
             "password" : password
         }
 
@@ -26,19 +25,18 @@ class User(Database):
 
         if user in registered_users or [
                                     registered_user for registered_user in registered_users
-                                    if registered_user[0] ==  id_number
-                                    and registered_user[3] == username
+                                    if registered_user[2] == email
                                 ]:
             return False
 
         else:
             register_user_query = """
                 INSERT INTO users
-                (id_number, full_name, username, password, registered_by)
-                VALUES (%s, %s, %s, %s, %s);
+                (full_name, email, password, registered_by)
+                VALUES (%s, %s, %s, %s);
             """
             self.cursor.execute(register_user_query, 
-                (id_number, full_name, username, password, 0)
+                (full_name, email, password, registered_by)
             )
             self.connection.commit()
             return True
@@ -58,13 +56,12 @@ class User(Database):
         for registered_user in registered_users:
             user = {
                 "user_id" : registered_user[0],
-                "id_number" : registered_user[1],
-                "full_name" : registered_user[2],
-                "username" : registered_user[3],
-                "password" : registered_user[4],
-                "admin" : registered_user[5],
-                "registered_by" :  registered_user[6],
-                "registered_on" : registered_user[7]
+                "full_name" : registered_user[1],
+                "email" : registered_user[2],
+                "password" : registered_user[3],
+                "admin" : registered_user[4],
+                "registered_by" :  registered_user[5],
+                "registered_on" : registered_user[6]
             }
             users.append(user)
 
@@ -82,43 +79,41 @@ class User(Database):
         
         user = {
             "user_id" : registered_user[0],
-            "id_number" : registered_user[1],
-            "full_name" : registered_user[2],
-            "username" : registered_user[3],
-            "password" : registered_user[4],
-            "admin" : registered_user[5],
-            "registered_by" :  registered_user[6],
-            "registered_on" : registered_user[7]
+            "full_name" : registered_user[1],
+            "email" : registered_user[2],
+            "password" : registered_user[3],
+            "admin" : registered_user[4],
+            "registered_by" :  registered_user[5],
+            "registered_on" : registered_user[6]
         }
 
         return user
 
-    def update_a_user_details(self, user_id, id_number, full_name, username, password, admin, registered_by):
+    def update_a_user_details(self, user_id, full_name, email, password, admin, updated_by):
         """ modify a specific user details """
 
         get_a_registered_user_query = "SELECT * FROM users WHERE user_id = %s"
         self.cursor.execute(get_a_registered_user_query, str(user_id))
         registered_user = self.cursor.fetchone()
-        username = registered_user[3]
+        full_name = registered_user[1]
 
         if len(registered_user) == 0:
             return False
         else:
             update_user_query = """
-                UPDATE users SET 
-                id_number = %s,
+                UPDATE users SET
                 full_name = %s,
-                username = %s,
+                email = %s,
                 password = %s,
                 admin = %s,
                 registered_by = %s
                 WHERE user_id = %s
             """
 
-            self.cursor.execute(update_user_query, (id_number, full_name, username, password, admin, registered_by, str(user_id)))
+            self.cursor.execute(update_user_query, (full_name, email, password, admin, updated_by, str(user_id)))
             self.connection.commit()
 
-            return username
+            return full_name
 
     def remove_a_specific_user(self, user_id):
         """ delete or remove a specific user """
@@ -126,20 +121,20 @@ class User(Database):
         get_a_registered_user_query = "SELECT * FROM users WHERE user_id = %s"
         self.cursor.execute(get_a_registered_user_query, str(user_id))
         registered_user = self.cursor.fetchone()
-        username = registered_user[3]
+        full_name = registered_user[1]
 
         delete_a_user_query = "DELETE FROM users WHERE user_id = %s"
         self.cursor.execute(delete_a_user_query, str(user_id))
         self.connection.commit()
 
-        return username
+        return full_name
 
-    def user_login(self, username, password):
+    def user_login(self, email):
         """ checking a user login credentials """
 
-        check_user_credentials_query = "SELECT user_id, username, password, admin FROM users WHERE username = %s AND password = %s;"
+        check_user_credentials_query = "SELECT * FROM users WHERE email = %s"
 
-        self.cursor.execute(check_user_credentials_query, (username, password))    
+        self.cursor.execute(check_user_credentials_query, (email,))    
         login_user = self.cursor.fetchone()
 
         if login_user == None:

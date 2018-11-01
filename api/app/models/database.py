@@ -25,10 +25,9 @@ class Database:
         querys = (
             """ CREATE TABLE IF NOT EXISTS users (
                 user_id SERIAL NOT NULL PRIMARY KEY,  
-                id_number VARCHAR (15) NOT NULL UNIQUE, 
-                full_name VARCHAR (50) NOT NULL, 
-                username VARCHAR (30) NOT NULL, 
-                password VARCHAR (50) NOT NULL,  
+                full_name VARCHAR (30) NOT NULL, 
+                email VARCHAR (30) NOT NULL UNIQUE, 
+                password TEXT NOT NULL,  
                 admin BOOLEAN NOT NULL DEFAULT FALSE, 
                 registered_by INT NOT NULL,  
                 registered_on TIMESTAMP DEFAULT NOW());
@@ -77,10 +76,10 @@ class Database:
             if not registered_users:
                 register_admin = """
                     INSERT INTO users
-                    (id_number, full_name, username, password, registered_by)
-                    VALUES (%s, %s, %s, %s, %s);
+                    (full_name, email, password, admin, registered_by)
+                    VALUES (%s, %s, %s, %s);
                 """
-                self.cursor.execute(register_admin, ("AD/2018/001", "Administrator", "admin", "admin", 0))
+                self.cursor.execute(register_admin, ("Administrator", "admin@api.com", generate_password_hash("admin"), TRUE, 0))
                 
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
