@@ -69,7 +69,7 @@ def add_product():
             "product_category" : added_product_details[2],
             "product_price" : added_product_details[3], 
             "product_quantity" : added_product_details[4],
-            "product_minimum_stock_allowed" : added_product_details[4]
+            "product_minimum_stock_allowed" : added_product_details[5]
         }
 
         if added_product_details:
@@ -189,8 +189,7 @@ def add_product_category():
 
         product_category_details = {
             "category_id" : added_category[0],
-            "category_name" : added_category[1],
-            "added_by" : added_category[2]
+            "category_name" : added_category[1]
         }
 
         if added_category:
