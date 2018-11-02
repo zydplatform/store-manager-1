@@ -41,7 +41,12 @@ class Product(Database):
                 (product_name, product_category, product_price, product_quantity, product_minimum_stock_allowed, added_by)
             )
             self.connection.commit()
-            return True   
+
+            added_product_query = "SELECT * FROM products WHERE product_id = currval(pg_get_serial_sequence('products','product_id'));"
+            self.cursor.execute(added_product_query)
+            added_product = self.cursor.fetchone()
+
+            return added_product   
 
     def get_all_products(self):
         """ get all products from database """
@@ -175,7 +180,14 @@ class ProductCategory(Database):
                 (category_name, added_by)
             )
             self.connection.commit()
-            return True   
+
+            added_category_query = """SELECT PC.category_id, PC.category_name, U.full_name FROM product_categories as PC 
+                JOIN users as U ON PC.category_id = U.user_id 
+                WHERE PC.category_id = currval(pg_get_serial_sequence('product_categories','category_id'));"""
+            self.cursor.execute(added_category_query)
+            added_category = self.cursor.fetchone()
+
+            return added_category   
 
     
     def get_all_product_categories(self):

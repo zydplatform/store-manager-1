@@ -15,7 +15,7 @@ def add_product():
     logged_in_user = get_jwt_identity()
 
     if logged_in_user["role"] == "attendant":
-        return jsonify({"message": "Unauthorized Access"}), 401
+        return jsonify({"error": "Unauthorized Access"}), 401
 
     data = request.json 
 
@@ -60,13 +60,25 @@ def add_product():
 
         inventory = Product()
 
-        if inventory.add_product(product_name, product_category, product_price, product_quantity, product_minimum_stock_allowed, logged_in_user["id"]):
-            return jsonify({"message": "Product added"}), 200
+        added_product_details = inventory.add_product(product_name, product_category, product_price, 
+            product_quantity, product_minimum_stock_allowed, logged_in_user["id"])
+
+        product_details = {
+            "product_id" : added_product_details[0],
+            "product_name" : added_product_details[1],
+            "product_category" : added_product_details[2],
+            "product_price" : added_product_details[3], 
+            "product_quantity" : added_product_details[4],
+            "product_minimum_stock_allowed" : added_product_details[4]
+        }
+
+        if added_product_details:
+            return jsonify({"message": "Product added", "product_details": product_details}), 200
         else:
-            return jsonify({"message": "Product exists"})
+            return jsonify({"error": "Product exists"})
 
     except ValueError:
-        return jsonify({"message": "Provide product details"}), 400
+        return jsonify({"error": "Provide product details"}), 400
 
 @app.route('/api/v1/products/', methods=['GET'])
 @jwt_required
@@ -88,7 +100,7 @@ def view_aproduct_details(product_id):
     product = inventory.get_a_product_by_id(product_id)
 
     if len(product) == 0:
-        return jsonify({"message": f"The product doesn't exist"}), 404
+        return jsonify({"error": f"The product doesn't exist"}), 404
 
     return jsonify({"Product": product}), 200
 
@@ -101,7 +113,7 @@ def edit_aproduct(product_id):
         logged_in_user = get_jwt_identity()
 
         if logged_in_user["role"] == "attendant":
-            return jsonify({"message": "Unauthorized Access"}), 401
+            return jsonify({"error": "Unauthorized Access"}), 401
 
         inventory = Product()
 
@@ -110,7 +122,7 @@ def edit_aproduct(product_id):
         product = [product for product in product_details if product_details["product_id"] == product_id]
 
         if len(product) == 0:
-            return jsonify({"message": f"The product is not available"}), 404
+            return jsonify({"error": f"The product is not available"}), 404
         else:
             if ("product_name" not in data or data["product_name"] == ""):
                 return jsonify({"error": "Provide product name"}), 400        
@@ -132,7 +144,7 @@ def edit_aproduct(product_id):
             if updated_product:
                 return jsonify({"message": f"{updated_product} updated"}), 200
             else:
-                return jsonify({"message": f"{updated_product} not updated"}), 500
+                return jsonify({"error": f"{updated_product} not updated"}), 500
     except:
         abort(500)
 
@@ -146,7 +158,7 @@ def delete_aproduct(product_id):
     product = [product for product in product_details if product_details["product_id"] == product_id]
 
     if len(product) == 0:
-        return jsonify({"message": f"The product doesn't exist"}), 400
+        return jsonify({"error": f"The product doesn't exist"}), 400
     else:
         deleted_product = inventory.remove_a_specific_product(product_id)   
         return jsonify({"message": f"{deleted_product} removed"}), 200
@@ -160,7 +172,7 @@ def add_product_category():
     logged_in_user = get_jwt_identity()
 
     if logged_in_user["role"] == "attendant":
-        return jsonify({"message": "Unauthorized Access"}), 401
+        return jsonify({"error": "Unauthorized Access"}), 401
 
     data = request.json
     try:
@@ -171,16 +183,22 @@ def add_product_category():
         elif (isinstance(data["category_name"], int)):
             return jsonify({"error": "Invalid product category name"}), 400
 
-        category_name = data["category_name"]
-
         inventory = ProductCategory()
 
-        if inventory.add_product_category(category_name, logged_in_user["id"]):
-            return jsonify({"message": "Product category added"}), 200
+        added_category = inventory.add_product_category(category_name, logged_in_user["id"])
+
+        product_category_details = {
+            "category_id" : added_category[0],
+            "category_name" : added_category[1],
+            "added_by" : added_category[2]
+        }
+
+        if added_category:
+            return jsonify({"message": "Product category added", "category_details" : product_category_details}), 200
         else:
-            return jsonify({"message": "Product category exists"})
+            return jsonify({"error": "Product category exists"})
     except ValueError:
-        return jsonify({"message": "Provide product category details"}), 400
+        return jsonify({"error": "Provide product category details"}), 400
 
 @app.route('/api/v1/products_categories', methods=['GET'])
 @jwt_required
@@ -190,7 +208,7 @@ def view_all_product_categories():
     product_categories = inventory.get_all_product_categories()
 
     if len(product_categories) == 0:
-        return jsonify({"message": "No product categories added yet"})
+        return jsonify({"error": "No product categories added yet"}), 404
 
     return jsonify({"Product_categories" : product_categories}), 200
 
@@ -202,7 +220,7 @@ def view_aproduct_category_details(category_id):
     product_category = inventory.get_a_product_category_by_id(category_id)
 
     if len(product_category) == 0:
-        return jsonify({"message": "Product category does not exist"}), 400
+        return jsonify({"error": "Product category does not exist"}), 400
 
     return jsonify({"Product_category" : product_category}), 200
 
@@ -216,7 +234,7 @@ def edit_aproduct_category(category_id):
         logged_in_user = get_jwt_identity()
 
         if logged_in_user["role"] == "attendant":
-            return jsonify({"message": "Unauthorized Access"}), 401
+            return jsonify({"error": "Unauthorized Access"}), 401
 
         if ("category_name" not in data or data["category_name"] == ""):
             return jsonify({"error": "Provide product category name"}), 400
@@ -230,12 +248,12 @@ def edit_aproduct_category(category_id):
         product_category_details = inventory.get_a_product_category_by_id(category_id)
 
         if len(product_category_details) == 0:
-            return jsonify({"message": "The product category does not exist"}), 404
+            return jsonify({"error": "The product category does not exist"}), 404
         else:
             if inventory.update_product_category(category_id, category_name, logged_in_user["id"]):
                 return jsonify({"message": f"{product_category_details['category_name']} updated"}), 200
             else:
-                return jsonify({"message": f"Product category {product_category_details['category_name']} was not updated"}), 404
+                return jsonify({"error": f"Product category {product_category_details['category_name']} was not updated"}), 404
     except:
         abort(500)
 
@@ -248,7 +266,7 @@ def delete_aproduct_category(category_id):
     product_category_details = inventory.get_a_product_category_by_id(category_id)
 
     if len(product_category_details) == 0:
-        return jsonify({"message": f"The product category doesn't exist"}), 404
+        return jsonify({"error": f"The product category doesn't exist"}), 404
     else:
         deleted_category = inventory.remove_a_specific_product_category(category_id)   
         return jsonify({"message": f"{deleted_category} removed"}), 200
