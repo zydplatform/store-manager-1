@@ -42,7 +42,11 @@ class Product(Database):
             )
             self.connection.commit()
 
-            added_product_query = "SELECT * FROM products WHERE product_id = currval(pg_get_serial_sequence('products','product_id'));"
+            added_product_query = """SELECT P.product_id, 
+                P.product_name, P.product_category, P.product_price, P.product_quantity, 
+                P.product_minimum_stock_allowed, U.full_name 
+                FROM products P JOIN users as U on P.product_id = U.user_id WHERE P.product_id = currval(pg_get_serial_sequence('products','product_id'));
+            """
             self.cursor.execute(added_product_query)
             added_product = self.cursor.fetchone()
 
