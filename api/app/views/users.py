@@ -21,7 +21,7 @@ def add_new_user():
     logged_in_user = get_jwt_identity()
 
     if logged_in_user["role"] == "attendant":
-        return jsonify({"message": "Unauthorized Access"}), 401
+        return jsonify({"error": "Unauthorized Access"}), 401
 
     data = request.json
 
@@ -50,13 +50,22 @@ def add_new_user():
 
         users = User()
 
-        if users.register_user(full_name, email, password, logged_in_user["id"]):
-            return jsonify({"message": "New User added"}), 200
+        registered_user = users.register_user(full_name, email, password, logged_in_user["id"])
+
+        registered_user_details = {
+            "user_id" : registered_user[0],
+            "full_name" : registered_user[1],
+            "email" : registered_user[2],
+            "password" : data["password"]
+        }
+
+        if registered_user != None:
+            return jsonify({"message": "New User added", "user_details" : registered_user_details}), 200
         else:
-            return jsonify({"message": "The User exists"}), 404
+            return jsonify({"error": "The User exists"}), 404
 
     except ValueError:
-        return jsonify({"message": "Provide User details"}), 400
+        return jsonify({"error": "Provide User details"}), 400
 
 @app.route('/api/v1/users/', methods=['GET'])
 @jwt_required
@@ -66,7 +75,7 @@ def view_all_users():
     logged_in_user = get_jwt_identity()
 
     if logged_in_user["role"] == "attendant":
-        return jsonify({"message": "Unauthorized Access"}), 401
+        return jsonify({"error": "Unauthorized Access"}), 401
 
     user_class = User()
     users = user_class.get_all_registered_users()
@@ -84,13 +93,13 @@ def view_a_registered_user_details(user_id):
     logged_in_user = get_jwt_identity()
 
     if logged_in_user["role"] == "attendant":
-        return jsonify({"message": "Unauthorized Access"}), 401
+        return jsonify({"error": "Unauthorized Access"}), 401
 
     user_class = User()
     user = user_class.get_a_registered_user_by_id(user_id)
 
     if len(user) == 0:
-        return jsonify({"message": "The User doesn't exist"}), 404
+        return jsonify({"error": "The User doesn't exist"}), 404
 
     return jsonify({"user": user}), 200
 
@@ -102,7 +111,7 @@ def edit_a_speific_user_details(user_id):
     logged_in_user = get_jwt_identity()
 
     if logged_in_user["role"] == "attendant":
-        return jsonify({"message": "Unauthorized Access"}), 401
+        return jsonify({"error": "Unauthorized Access"}), 401
 
     data = request.json
 
@@ -111,7 +120,7 @@ def edit_a_speific_user_details(user_id):
         user = user_class.get_a_registered_user_by_id(user_id)
 
         if len(user) == 0:
-            return jsonify({"message": "The User doesn't exist"}), 404
+            return jsonify({"error": "The User doesn't exist"}), 404
         else:
 
             if ("full_name" not in data or data["full_name"] == ""):
@@ -136,7 +145,7 @@ def edit_a_speific_user_details(user_id):
             user = user_class.get_a_registered_user_by_id(user_id)
 
             if len(user) == 0:
-                return jsonify({"message": "The User doesn't exist"}), 404
+                return jsonify({"error": "The User doesn't exist"}), 404
             else:
                 updated_user = user_class.update_a_user_details(
                     user_id, data["full_name"], data["email"], generate_password_hash(data["password"]), data["admin"],  logged_in_user["id"]
@@ -145,7 +154,7 @@ def edit_a_speific_user_details(user_id):
                 if updated_user:
                     return jsonify({"message": f"User {updated_user} updated"}), 200
                 else:
-                    return jsonify({"message": f"User {data['full_name']} not updated"}), 200
+                    return jsonify({"error": f"User {data['full_name']} not updated"}), 500
     except:
         abort(500)
 
@@ -158,13 +167,13 @@ def delete_a_registered_user(user_id):
     logged_in_user = get_jwt_identity()
 
     if logged_in_user["role"] == "attendant":
-        return jsonify({"message": "Unauthorized Access"}), 401
+        return jsonify({"error": "Unauthorized Access"}), 401
 
     user_class = User()
     user = user_class.get_a_registered_user_by_id(user_id)
 
     if len(user) == 0:
-        return jsonify({"message": "The User doesn't exist"}), 404
+        return jsonify({"error": "The User doesn't exist"}), 404
     else:
         deleted_user = user_class.remove_a_specific_user(user_id)    
         return jsonify({"message": f"{deleted_user} removed"}), 200
@@ -206,7 +215,7 @@ def user_login():
         token = create_access_token(identity = logged_in, expires_delta = datetime.timedelta(days=1))
         return jsonify({"message": f"User logged In as {logged_in['role']}", "login_token" : token}), 200
     else:
-        return jsonify({"message": "Wrong login Credentials"}), 404
+        return jsonify({"error": "Wrong login Credentials"}), 401
 
 @app.route('/api/v1/auth/logout', methods=['DELETE'])
 @jwt_required

@@ -39,7 +39,12 @@ class User(Database):
                 (full_name, email, password, registered_by)
             )
             self.connection.commit()
-            return True
+            
+            registered_user_query = "SELECT * FROM users WHERE user_id = currval(pg_get_serial_sequence('users','user_id'));"
+            self.cursor.execute(registered_user_query)
+            registered_user = self.cursor.fetchone()            
+
+            return registered_user
     
     def get_all_registered_users(self):
         """ get all registered users from database """
