@@ -183,15 +183,17 @@ def add_product_category():
         elif (isinstance(data["category_name"], int)):
             return jsonify({"error": "Invalid product category name"}), 400
 
-        category_name = data["category_name"]
-
         inventory = ProductCategory()
 
+        added_category = inventory.add_product_category(category_name, logged_in_user["id"])
+
         product_category_details = {
-            "category_name" : category_name
+            "category_id" : added_category[0],
+            "category_name" : added_category[1],
+            "added_by" : added_category[2]
         }
 
-        if inventory.add_product_category(category_name, logged_in_user["id"]):
+        if added_category:
             return jsonify({"message": "Product category added", "category_details" : product_category_details}), 200
         else:
             return jsonify({"error": "Product category exists"})
