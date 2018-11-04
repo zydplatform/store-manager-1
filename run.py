@@ -1,7 +1,7 @@
 
 from api.app import app
 from api.app.models.database import Database
-from api.app.views import main, users, products
+from api.app.views import main, users, products, sales
 
 
 if __name__ == '__main__':

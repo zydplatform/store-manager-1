@@ -2,13 +2,15 @@
 
 from api.app.models.database import Database
 
-class User(Database):
+db = Database()
+
+class User:
     """ User Class for handling users """
 
     def __init__(self):
         """ initialising User """
-        super().__init__()
 
+        pass
 
     def register_user(self, full_name, email, password, registered_by):
         user = {
@@ -19,9 +21,9 @@ class User(Database):
 
         get_all_registered_users_query = "SELECT * FROM users"
 
-        self.cursor.execute(get_all_registered_users_query)
+        db.cursor.execute(get_all_registered_users_query)
 
-        registered_users = self.cursor.fetchall()
+        registered_users = db.cursor.fetchall()
 
         if user in registered_users or [
                                     registered_user for registered_user in registered_users
@@ -35,14 +37,14 @@ class User(Database):
                 (full_name, email, password, registered_by)
                 VALUES (%s, %s, %s, %s);
             """
-            self.cursor.execute(register_user_query, 
+            db.cursor.execute(register_user_query, 
                 (full_name, email, password, registered_by)
             )
-            self.connection.commit()
+            db.connection.commit()
             
             registered_user_query = "SELECT * FROM users WHERE user_id = currval(pg_get_serial_sequence('users','user_id'));"
-            self.cursor.execute(registered_user_query)
-            registered_user = self.cursor.fetchone()            
+            db.cursor.execute(registered_user_query)
+            registered_user = db.cursor.fetchone()            
 
             return registered_user
     
@@ -50,8 +52,8 @@ class User(Database):
         """ get all registered users from database """
 
         get_registered_users_query = "SELECT * FROM users"
-        self.cursor.execute(get_registered_users_query)
-        registered_users = self.cursor.fetchall()
+        db.cursor.execute(get_registered_users_query)
+        registered_users = db.cursor.fetchall()
 
         if registered_users == None:
             return {}
@@ -63,7 +65,6 @@ class User(Database):
                 "user_id" : registered_user[0],
                 "full_name" : registered_user[1],
                 "email" : registered_user[2],
-                "password" : registered_user[3],
                 "admin" : registered_user[4],
                 "registered_by" :  registered_user[5],
                 "registered_on" : registered_user[6]
@@ -76,8 +77,8 @@ class User(Database):
         """ get a specific user from the database """
 
         get_a_registered_user_query = "SELECT * FROM users WHERE user_id = %s"
-        self.cursor.execute(get_a_registered_user_query, str(user_id))
-        registered_user = self.cursor.fetchone()
+        db.cursor.execute(get_a_registered_user_query, str(user_id))
+        registered_user = db.cursor.fetchone()
             
         if registered_user == None:
             return {}
@@ -86,7 +87,6 @@ class User(Database):
             "user_id" : registered_user[0],
             "full_name" : registered_user[1],
             "email" : registered_user[2],
-            "password" : registered_user[3],
             "admin" : registered_user[4],
             "registered_by" :  registered_user[5],
             "registered_on" : registered_user[6]
@@ -98,9 +98,9 @@ class User(Database):
         """ modify a specific user details """
 
         get_a_registered_user_query = "SELECT * FROM users WHERE user_id = %s"
-        self.cursor.execute(get_a_registered_user_query, str(user_id))
-        registered_user = self.cursor.fetchone()
-        full_name = registered_user[1]
+        db.cursor.execute(get_a_registered_user_query, str(user_id))
+        registered_user = db.cursor.fetchone()
+        user_full_name = registered_user[1]
 
         if len(registered_user) == 0:
             return False
@@ -115,22 +115,22 @@ class User(Database):
                 WHERE user_id = %s
             """
 
-            self.cursor.execute(update_user_query, (full_name, email, password, admin, updated_by, str(user_id)))
-            self.connection.commit()
+            db.cursor.execute(update_user_query, (full_name, email, password, admin, updated_by, str(user_id)))
+            db.connection.commit()
 
-            return full_name
+            return user_full_name
 
     def remove_a_specific_user(self, user_id):
         """ delete or remove a specific user """
 
         get_a_registered_user_query = "SELECT * FROM users WHERE user_id = %s"
-        self.cursor.execute(get_a_registered_user_query, str(user_id))
-        registered_user = self.cursor.fetchone()
+        db.cursor.execute(get_a_registered_user_query, str(user_id))
+        registered_user = db.cursor.fetchone()
         full_name = registered_user[1]
 
         delete_a_user_query = "DELETE FROM users WHERE user_id = %s"
-        self.cursor.execute(delete_a_user_query, str(user_id))
-        self.connection.commit()
+        db.cursor.execute(delete_a_user_query, str(user_id))
+        db.connection.commit()
 
         return full_name
 
@@ -139,8 +139,8 @@ class User(Database):
 
         check_user_credentials_query = "SELECT * FROM users WHERE email = %s"
 
-        self.cursor.execute(check_user_credentials_query, (email,))    
-        login_user = self.cursor.fetchone()
+        db.cursor.execute(check_user_credentials_query, (email,))    
+        login_user = db.cursor.fetchone()
 
         if login_user == None:
             return False
