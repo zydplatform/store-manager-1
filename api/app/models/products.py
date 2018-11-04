@@ -2,14 +2,17 @@
 
 from api.app.models.database import Database
 
-class Product(Database):
+db = Database()
+
+class Product:
     """ Product Class for handling stock products """
 
     def __init__(self):
         """ Initalizing the product """
 
-        super().__init__()
+        pass
 
+    
     def add_product(self, product_name, product_category, product_price, product_quantity, product_minimum_stock_allowed, added_by):
         product = {
             "product_name" : product_name,
@@ -21,9 +24,9 @@ class Product(Database):
 
         get_all_products_query = "SELECT * FROM products"
 
-        self.cursor.execute(get_all_products_query)
+        db.cursor.execute(get_all_products_query)
 
-        products = self.cursor.fetchall()
+        products = db.cursor.fetchall()
 
         if product in products or [
                                     product for product in products
@@ -37,18 +40,18 @@ class Product(Database):
                 (product_name, product_category, product_price, product_quantity, product_minimum_stock_allowed, added_by)
                 VALUES (%s, %s, %s, %s, %s, %s);
             """
-            self.cursor.execute(add_product_query, 
+            db.cursor.execute(add_product_query, 
                 (product_name, product_category, product_price, product_quantity, product_minimum_stock_allowed, added_by)
             )
-            self.connection.commit()
+            db.connection.commit()
 
-            added_product_query = """SELECT P.product_id, 
-                P.product_name, P.product_category, P.product_price, P.product_quantity, 
-                P.product_minimum_stock_allowed, U.full_name 
-                FROM products P JOIN users as U on P.product_id = U.user_id WHERE P.product_id = currval(pg_get_serial_sequence('products','product_id'));
+            added_product_query = """SELECT P.product_id, P.product_name, P.product_category, P.product_price, 
+                P.product_quantity, P.product_minimum_stock_allowed, P.added_by 
+                FROM products as P 
+                WHERE product_id = currval(pg_get_serial_sequence('products','product_id'));
             """
-            self.cursor.execute(added_product_query)
-            added_product = self.cursor.fetchone()
+            db.cursor.execute(added_product_query)
+            added_product = db.cursor.fetchone()
 
             return added_product   
 
@@ -56,8 +59,8 @@ class Product(Database):
         """ get all products from database """
 
         get_products_query = "SELECT * FROM products"
-        self.cursor.execute(get_products_query)
-        all_products = self.cursor.fetchall()
+        db.cursor.execute(get_products_query)
+        all_products = db.cursor.fetchall()
 
         if all_products == None:
             return {}
@@ -83,8 +86,8 @@ class Product(Database):
         """ get a specific product from the database """
 
         get_a_product_query = "SELECT * FROM products WHERE product_id = %s"
-        self.cursor.execute(get_a_product_query, str(product_id))
-        product_details = self.cursor.fetchone()
+        db.cursor.execute(get_a_product_query, str(product_id))
+        product_details = db.cursor.fetchone()
             
         if product_details == None:
             return {}
@@ -108,8 +111,8 @@ class Product(Database):
         """ modify a specific product details """
 
         get_a_product_query = "SELECT * FROM products WHERE product_id = %s"
-        self.cursor.execute(get_a_product_query, str(product_id))
-        product_details = self.cursor.fetchone()
+        db.cursor.execute(get_a_product_query, str(product_id))
+        product_details = db.cursor.fetchone()
         product = product_details[1]
 
         if len(product) == 0:
@@ -126,11 +129,11 @@ class Product(Database):
                 WHERE product_id = %s
             """
 
-            self.cursor.execute(update_product_query, (product_name, product_category, 
+            db.cursor.execute(update_product_query, (product_name, product_category, 
                 product_price, product_quantity, product_minimum_stock_allowed, 
                 added_by, product_id))
 
-            self.connection.commit()
+            db.connection.commit()
 
             return product     
 
@@ -138,24 +141,23 @@ class Product(Database):
         """ delete or remove a specific product """
 
         get_a_product_query = "SELECT * FROM products WHERE product_id = %s"
-        self.cursor.execute(get_a_product_query, str(product_id))
-        product = self.cursor.fetchone()
+        db.cursor.execute(get_a_product_query, str(product_id))
+        product = db.cursor.fetchone()
         product_name = product[1]
 
         delete_a_product_query = "DELETE FROM products WHERE product_id = %s"
-        self.cursor.execute(delete_a_product_query, str(product_id))
-        self.connection.commit()
+        db.cursor.execute(delete_a_product_query, str(product_id))
+        db.connection.commit()
 
         return product_name  
 
-class ProductCategory(Database):
+class ProductCategory:
     """ Product Category Class for handling product category """
 
     def __init__(self):
         """ Initalizing the product category """
-        
-        super().__init__()
 
+        pass
 
     def add_product_category(self, category_name, added_by):
         category = {
@@ -164,9 +166,9 @@ class ProductCategory(Database):
 
         get_all_product_categoriess_query = "SELECT * FROM product_categories"
 
-        self.cursor.execute(get_all_product_categoriess_query)
+        db.cursor.execute(get_all_product_categoriess_query)
 
-        product_categories = self.cursor.fetchall()
+        product_categories = db.cursor.fetchall()
 
         if category in product_categories or [
                                     product_category for product_category in product_categories
@@ -180,16 +182,15 @@ class ProductCategory(Database):
                 (category_name, added_by)
                 VALUES (%s, %s);
             """
-            self.cursor.execute(add_product_category_query, 
+            db.cursor.execute(add_product_category_query, 
                 (category_name, added_by)
             )
-            self.connection.commit()
+            db.connection.commit()
 
-            added_category_query = """SELECT PC.category_id, PC.category_name, U.full_name FROM product_categories as PC 
-                JOIN users as U ON PC.category_id = U.user_id 
+            added_category_query = """SELECT PC.category_id, PC.category_name FROM product_categories as PC 
                 WHERE PC.category_id = currval(pg_get_serial_sequence('product_categories','category_id'));"""
-            self.cursor.execute(added_category_query)
-            added_category = self.cursor.fetchone()
+            db.cursor.execute(added_category_query)
+            added_category = db.cursor.fetchone()
 
             return added_category   
 
@@ -198,8 +199,8 @@ class ProductCategory(Database):
         """ get all product categories from database """
 
         get_categories_query = "SELECT * FROM product_categories"
-        self.cursor.execute(get_categories_query)
-        all_product_categories = self.cursor.fetchall()
+        db.cursor.execute(get_categories_query)
+        all_product_categories = db.cursor.fetchall()
 
         if all_product_categories == None:
             return {}
@@ -221,8 +222,8 @@ class ProductCategory(Database):
         """ get a specific product category from the database """
 
         get_a_product_category_query = "SELECT * FROM product_categories WHERE category_id = %s"
-        self.cursor.execute(get_a_product_category_query, str(category_id))
-        product_category_details = self.cursor.fetchone()
+        db.cursor.execute(get_a_product_category_query, str(category_id))
+        product_category_details = db.cursor.fetchone()
             
         if product_category_details == None:
             return {}
@@ -240,8 +241,8 @@ class ProductCategory(Database):
         """ modify a specific product category details """
 
         get_a_product_category_query = "SELECT * FROM product_categories WHERE category_id = %s"
-        self.cursor.execute(get_a_product_category_query, str(category_id))
-        product_category_details = self.cursor.fetchone()
+        db.cursor.execute(get_a_product_category_query, str(category_id))
+        product_category_details = db.cursor.fetchone()
 
         if len(product_category_details) == 0:
             return False
@@ -253,9 +254,9 @@ class ProductCategory(Database):
                 WHERE category_id = %s
             """
 
-            self.cursor.execute(update_product_category_query, (category_name, added_by, category_id))
+            db.cursor.execute(update_product_category_query, (category_name, added_by, category_id))
 
-            self.connection.commit()
+            db.connection.commit()
 
             return product_category_details[1]
 
@@ -263,13 +264,13 @@ class ProductCategory(Database):
         """ delete or remove a specific product category """
 
         get_a_product_category_query = "SELECT * FROM product_categories WHERE category_id = %s"
-        self.cursor.execute(get_a_product_category_query, str(category_id))
-        product_category = self.cursor.fetchone()
+        db.cursor.execute(get_a_product_category_query, str(category_id))
+        product_category = db.cursor.fetchone()
         product_category_name = product_category[1]
 
         delete_a_product_category_query = "DELETE FROM product_categories WHERE category_id = %s"
-        self.cursor.execute(delete_a_product_category_query, str(category_id))
-        self.connection.commit()
+        db.cursor.execute(delete_a_product_category_query, str(category_id))
+        db.connection.commit()
         
         return product_category_name
 

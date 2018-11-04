@@ -51,8 +51,8 @@ class Database:
             """,
             """ CREATE TABLE IF NOT EXISTS sales (
                 sales_id SERIAL NOT NULL PRIMARY KEY,  
-                products JSONB NOT NULL,
-                total_cost INT NOT NULL, 
+                product INT NOT NULL,
+                quantity INT NOT NULL, 
                 seller INT NOT NULL REFERENCES users(user_id) ON DELETE RESTRICT, 
                 date_sold TIMESTAMP DEFAULT NOW());
             """
