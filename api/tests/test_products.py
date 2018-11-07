@@ -7,6 +7,14 @@ class TestProductsCase(TestCase):
 
     def setUp(self):
         self.tester = app.test_client()
+        self.login_response = self.tester.post("api/v1/auth/login", 
+            data = json.dumps({
+                "email": "admin@api.com", 
+                "password": "admin"
+            }), 
+            content_type="application/json"
+        )
+        self.token = json.loads(self.login_response.data)       
     
     def test_add_aproduct_category(self):
         response = self.tester.post('/api/v1/products_categories',
@@ -17,17 +25,21 @@ class TestProductsCase(TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
-
     def test_get_all_product_categories(self):
-        response = self.tester.get('/api/v1/products_categories')
+        response = self.tester.get('/api/v1/products_categories', 
+            headers=dict(Authorization='Bearer '+ self.token)
+        )
         self.assertEqual(response.status_code, 200)
 
     def test_get_aspecific_product_category(self):
-        response = self.tester.get('/api/v1/products_categories/1')
+        response = self.tester.get('/api/v1/products_categories/1', 
+            headers=dict(Authorization='Bearer '+ self.token)
+        )
         self.assertEqual(response.status_code, 200)
 
     def test_admin_edit_aspecific_product_category_details(self):
         response = self.tester.put('/api/v1/products_categories/1', 
+            headers=dict(Authorization='Bearer '+ self.token),
             content_type="application/json", 
             data = json.dumps(
                 dict( category_name = "House Holds" )
@@ -36,11 +48,14 @@ class TestProductsCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_admin_delete_aproduct_category(self):
-        response = self.tester.delete('/api/v1/products_categories/1')
+        response = self.tester.delete('/api/v1/products_categories/1', 
+            headers=dict(Authorization='Bearer '+ self.token)
+        )
         self.assertEqual(response.status_code, 200)
 
     def test_add_aproduct(self):
-        response = self.tester.post('/api/v1/products', 
+        response = self.tester.post('/api/v1/products',  
+            headers=dict(Authorization='Bearer '+ self.token),
             content_type="application/json", 
             data=json.dumps(
                 dict(
@@ -55,15 +70,20 @@ class TestProductsCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_get_all_products(self):
-        response = self.tester.get('/api/v1/products')
+        response = self.tester.get('/api/v1/products',  
+            headers=dict(Authorization='Bearer '+ self.token)
+        )
         self.assertEqual(response.status_code, 200)
     
     def test_get_one_product(self):
-        response = self.tester.get('/api/v1/products/1')
+        response = self.tester.get('/api/v1/products/1',  
+            headers=dict(Authorization='Bearer '+ self.token)
+        )
         self.assertEqual(response.status_code, 200)
     
     def test_edit_aproduct_details(self):
-        response = self.tester.put('/api/v1/products/1', 
+        response = self.tester.put('/api/v1/products/1',  
+            headers=dict(Authorization='Bearer '+ self.token),
             content_type="application/json", 
             data=json.dumps(
                 dict(
@@ -78,6 +98,8 @@ class TestProductsCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_delete_aproduct(self):
-        response = self.tester.delete('/api/v1/products/1')
+        response = self.tester.delete('/api/v1/products/1',  
+            headers=dict(Authorization='Bearer '+ self.token)
+        )
         self.assertEqual(response.status_code, 200)
     
