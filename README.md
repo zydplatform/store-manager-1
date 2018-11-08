@@ -1,6 +1,14 @@
 # Store Manager
 Store Manager is a web application that helps store owners manage sales and product inventory records of a single store.
 
+[![Build Status](https://travis-ci.com/WalujoEmmanuel/store-manager.svg?branch=ft-add-tests)](https://travis-ci.com/WalujoEmmanuel/store-manager)
+
+[![Coverage Status](https://coveralls.io/repos/github/WalujoEmmanuel/store-manager/badge.svg?branch=ft-add-tests)](https://coveralls.io/github/WalujoEmmanuel/store-manager?branch=ft-add-tests)
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://codeclimate.com/github/codeclimate/codeclimate/maintainability)
+
+[![Test Coverage](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/test_coverage)](https://codeclimate.com/github/codeclimate/codeclimate/test_coverage)
+
 ## About Store Manager
 The Application is used for managing a single store. It has two main for Store Owner or Administrator and the Store Attendant
 
